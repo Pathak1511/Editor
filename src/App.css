@@ -1,0 +1,454 @@
+/* common color */
+
+body {
+  height: 100vh;
+}
+.colorWhite {
+  color: #f8f8f8;
+}
+
+.homePage {
+  background: "#090B10";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  height: 100vh;
+}
+
+.form {
+  background-color: #090b10;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+.HomePageLogo {
+  height: 70px;
+  margin-bottom: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputBox {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  margin-bottom: 10px;
+  background-color: #eee;
+  font-size: 12px;
+  font-weight: bold;
+}
+.createnewBtn {
+  color: #4aed88;
+  list-style: none;
+  text-decoration: none;
+  border-bottom: 1px solid #4aed88;
+  transition: all 0.3s ease-in-out;
+}
+
+.createnewBtn:hover {
+  color: #2b28;
+  border-color: #2b28;
+}
+
+.btn {
+  border: none;
+  padding: 10px;
+  border-radius: 2px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.joinBtn {
+  width: 100px;
+  align-self: flex-end;
+  background-color: #4aed88;
+}
+
+.joinBtn:hover,
+.copyBtn:hover {
+  background-color: #2b28;
+}
+
+.createInfo {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.main-label {
+  margin-bottom: 20px;
+  margin-top: 0px;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+}
+
+footer a {
+  color: #4aed88;
+}
+/* Editor Page Design */
+.editorWrap {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  height: 100vh;
+  position: relative;
+}
+
+.logo {
+  border-bottom: 1px solid #fff;
+  padding-bottom: 10px;
+}
+.EditorPageLogo {
+  width: 140px;
+  height: 60px;
+  margin-bottom: 4px;
+}
+
+.sidebar {
+  background-color: #090b10;
+  padding: 16px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.asideInner {
+  flex: 1;
+}
+
+.clientList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.editor {
+  background-color: #23262a;
+}
+
+.copyBtn {
+  background-color: #4aed88;
+}
+.copyBtn:hover {
+  background-color: #2b28;
+}
+
+.leaveBtn {
+  margin-top: 10px;
+  background-color: #ff3333;
+  color: #f8f8f8;
+}
+.leaveBtn:hover {
+  background-color: #ff4444;
+}
+
+.outputHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* client.js */
+.client {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.userName {
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+/* editor.js */
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root {
+  display: none !important;
+}
+
+.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
+  background-color: #f8f8f8 !important;
+  border: none !important;
+  border-radius: 0px !important;
+  outline: 0 !important;
+}
+
+.MuiAutocomplete-root fieldset:hover {
+  border-color: #2196f3 !important;
+}
+
+.output {
+  height: 272px;
+  padding-left: 4px;
+}
+
+.btnRun {
+  width: 120px;
+  height: 40px;
+  font-size: 10px;
+  background-color: #4aed88;
+}
+
+.languageText {
+  background-color: #f7f7f7;
+}
+
+/* chat */
+.chat-icon {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+}
+.chat-message {
+  position: absolute;
+  bottom: 40px;
+  right: 0px;
+}
+.chat-message-box {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 8px;
+  z-index: 4;
+}
+.chat-box {
+  position: relative;
+}
+.chat-send-box {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  bottom: 20px;
+  width: 320px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.chat-send {
+  background-color: #f8f8f8;
+  color: #23262a;
+  width: 280px;
+  border-radius: 6px;
+  padding: 8px 10px;
+  outline: none;
+  cursor: pointer;
+  border: 0.1rem solid #bbc1e1;
+  background: #fff;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.chat-send-icons {
+  font-size: 20;
+  transform: translate(0);
+}
+
+.chat-container {
+  max-height: 480px;
+  overflow-y: auto;
+}
+.sent-message,
+.received-message {
+  max-height: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 2px;
+}
+.message-box {
+  max-width: fit-content;
+  padding: 6px 6px;
+  border-radius: 10px;
+  border-bottom-right-radius: 0px;
+  background-color: #23262a;
+}
+.sent-message {
+  display: flex;
+  color: white;
+  justify-content: flex-end;
+}
+
+.received-message {
+  display: flex;
+  color: #fff;
+  justify-content: flex-start;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.chat-container::-webkit-scrollbar {
+  width: 0em;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+.joined {
+  display: flex;
+  color: #f8f8f8;
+  font-size: 10px;
+  font-weight: 600;
+  justify-content: center;
+}
+
+/* New addes */
+.folder,
+.folderStructure {
+  margin-top: 16px;
+  /* background-color: lightgray; */
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2px;
+  width: 160px;
+  cursor: pointer;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red; /* Change to your desired color */
+}
+
+.selected {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.inputContainer > span {
+  margin-top: 5px;
+}
+
+.inputContainer__input {
+  margin: 6px 0 0px 0;
+  padding: 5px;
+  display: flex;
+  border: 1px solid lightgray;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.folder > span {
+  margin: 0 5px;
+}
+
+.folder > div > button {
+  font-size: 15px;
+  background-color: white;
+}
+
+.file {
+  margin-top: 5px;
+  padding-left: 5px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+/* MainEditor Redesign */
+
+.Header {
+  height: 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #090b10;
+  color: #fff;
+  padding: 0 20px;
+  border-bottom: 1px solid #222;
+}
+
+.header_Container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header_btn {
+  gap: 20px;
+}
+
+.Sidebar {
+  width: 200px;
+  background-color: #090b10;
+  height: calc(100vh - 68px);
+}
+.Editor-Bottom {
+  display: flex;
+  height: 16px;
+  background-color: #eb1224;
+}
+.Main_Container {
+  display: flex;
+}
+.folder_container {
+  height: 40vh;
+}
+
+.folderStructure {
+  margin-top: 0px;
+  padding-top: 10px;
+  color: #fff;
+}
+
+.RealTimeEditor {
+  width: calc(72vw - 200px);
+  height: calc(100vh - 68px);
+}
+
+.CodeMirror {
+  min-height: calc(100vh - 68px);
+  font-size: 14px;
+  line-height: 1.1;
+  z-index: 2;
+}
+
+.Output {
+  flex: 1;
+  border: 0.4px solid #222;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #0d1117;
+}
+
+.Output_Container {
+  display: flex;
+  flex-direction: column;
+  height: 45vh;
+  margin-bottom: 2px;
+  color: #fff;
+  border-bottom: 0.4px solid #222;
+}
+
+.Output_Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
