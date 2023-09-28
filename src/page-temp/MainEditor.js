@@ -144,7 +144,7 @@ function MainEditor() {
   }
 
   return (
-    <div>
+    <div className="Editor_Container">
       <Header
         leaveRoom={leaveRoom}
         copyId={copyId}

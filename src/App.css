@@ -2,6 +2,7 @@
 
 body {
   height: 100vh;
+  position: relative;
 }
 .colorWhite {
   color: #f8f8f8;
@@ -451,4 +452,32 @@ footer a {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+}
+
+@media (max-width: 480px) {
+  .Sidebar {
+    display: none;
+  }
+  .Main_Container {
+    flex-direction: column;
+  }
+  .RealTimeEditor {
+    width: calc(100vw);
+    height: calc(100vh - 68px);
+  }
+  .Header {
+    height: fit-content;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+  .css-vsenj0 {
+    width: 320px !important;
+  }
+  .chat-icon {
+    position: fixed;
+    z-index: 4;
+  }
 }
