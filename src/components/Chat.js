@@ -33,7 +33,6 @@ function Chat({ show, socketRef, userName }) {
       userName: userName,
       isJoined: false,
     };
-    setInputText("");
 
     socketRef.current.emit(ACTIONS.CHAT, msgobj);
   };
