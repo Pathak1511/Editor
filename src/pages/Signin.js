@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import Avatar from "@mui/material/Avatar";
@@ -14,6 +14,7 @@ import Grid from "@mui/material/Grid";
 import CodeIcon from "@mui/icons-material/Code";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -37,28 +38,50 @@ const defaultTheme = createTheme();
 
 export default function Signin() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.state?.userName) {
+      navigate("/login");
+    }
+  }, []);
 
   const [id, setId] = useState("");
-  const [userName, setuserName] = useState("");
+  const [userName, setuserName] = useState(location.state?.userName);
   const [Password, setPassword] = useState("");
 
-  const joinRoom = () => {
-    if (!id || !userName) {
-      toast.error("Room id and username is required");
-      return;
+  const validate = () => {
+    if (!location.state?.Cookie) {
+      return "error";
     }
+    try {
+      axios.get("https://codeflow-3ir4.onrender.com/v1/auth/me", {
+        headers: {
+          Authorization: `Bearer=${location.state?.Cookie}`,
+        },
+      });
+      return "success";
+    } catch (error) {
+      return "error";
+    }
+  };
 
-    // redirect to new route
-    if (Password === "HriHarRam1234") {
+  const joinRoom = async () => {
+    if (!id) {
+      toast.error("Room id and username is required");
+    }
+    const valid = await validate();
+    if (valid === "success") {
+      console.log(userName, id, location.state?.Cookie);
       navigate(`/editor/${id}`, {
         state: {
-          userName,
+          userName: userName,
+          Cookie: location.state?.Cookie,
         },
       });
     } else {
-      toast.error(
-        "This is in development and accessible only for some authorizes person"
-      );
+      toast.error("Unauthorized");
+      navigate("/login");
     }
   };
 
@@ -128,6 +151,7 @@ export default function Signin() {
                 onChange={(e) => setuserName(e.target.value)}
                 value={userName}
                 onKeyUp={handleInputEnter}
+                disabled
               />
               <TextField
                 margin="normal"

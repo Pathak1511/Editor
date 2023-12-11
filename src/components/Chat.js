@@ -24,6 +24,8 @@ function Chat({ show, socketRef, userName }) {
       });
       isEffectSetup.current = true;
     }
+
+    console.log(messages);
   }, [socketRef.current, inputText]);
 
   const handleSendClick = () => {

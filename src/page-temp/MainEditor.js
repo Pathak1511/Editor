@@ -5,12 +5,7 @@ import language from "../data/language";
 import { initSocket } from "../socket";
 import ACTIONS from "../Actions";
 import piston from "piston-client";
-import {
-  useLocation,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Fab from "@mui/material/Fab";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -19,6 +14,10 @@ import Editor from "./../components/Editor";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import BasicTabs from "../components/Tabs";
 
 function MainEditor() {
   const reactNavigation = useNavigate();
@@ -48,6 +47,34 @@ function MainEditor() {
   const [outputSubject, setoutputSubject] = useState(["Success", "#2e7d32"]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState("none");
+  const [args, setArgs] = useState("");
+
+  const [origin, setOrigin] = React.useState({
+    open: false,
+    vertical: "bottom",
+    horizontal: "right",
+  });
+  const { vertical, horizontal, open } = origin;
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOrigin({ ...origin, open: false });
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const onSendCode = async (Currentcode) => {
     // send request to backend server for getting output
@@ -57,7 +84,26 @@ function MainEditor() {
     const client = piston({ server: "https://emkc.org" });
 
     const runtimes = await client.runtimes();
-    const result = await client.execute(inputValue, Currentcode);
+
+    // const result = await client.execute(inputValue, Currentcode, {
+    //   args: [args],
+    // });
+
+    const result = await client.execute({
+      language: inputValue,
+      files: [
+        {
+          content: Currentcode,
+        },
+      ],
+      stdin: args,
+      args: [args],
+      compileTimeout: 10000,
+      runTimeout: 3000,
+      compileMemoryLimit: -1,
+      runMemoryLimit: -1,
+    });
+
     if (result?.run?.stderr === "") {
       const result_output = result?.run?.output.replace(/\n/g, "<br>");
       setOutput(result_output);
@@ -125,7 +171,7 @@ function MainEditor() {
     return () => {
       socketRef.current.off(ACTIONS.JOINED);
       socketRef.current.off(ACTIONS.JOIN);
-      socketRef.current.disconnect();
+      socketRef.current.disconnect({ id });
     };
   }, []);
 
@@ -140,7 +186,12 @@ function MainEditor() {
   }
 
   function leaveRoom() {
-    reactNavigation("/");
+    reactNavigation("/", {
+      state: {
+        userName: location.state?.userName,
+        Cookie: location.state?.Cookie,
+      },
+    });
   }
 
   return (
@@ -178,6 +229,9 @@ function MainEditor() {
       <div className="Main_Container">
         <SideBar clients={clients} />
         <div className="RealTimeEditor">
+          <div>
+            <BasicTabs />
+          </div>
           <Editor
             socketRef={socketRef}
             id={id}
@@ -218,9 +272,26 @@ function MainEditor() {
             <div className="Output_Header">
               <div>Input</div>
             </div>
+            <Grid>
+              <textarea
+                placeholder="Type your input here..."
+                rows="4"
+                value={args}
+                onChange={(e) => setArgs(e.target.value)}
+                style={{ color: "#f8f8f8" }}
+              ></textarea>
+            </Grid>
           </div>
         </div>
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="msg received"
+        action={action}
+      />
       <div className="Editor-Bottom"></div>
     </div>
   );

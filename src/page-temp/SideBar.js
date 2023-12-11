@@ -23,6 +23,7 @@ function SideBar({ clients }) {
         handleDeleteNode={handleDeleteNode}
         explorer={explorerData}
       />
+
       <h3 style={{ color: "#fff" }}>Connected</h3>
       <div className="clientList">
         {clients.map((client) => (

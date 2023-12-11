@@ -5,12 +5,13 @@ import "codemirror/lib/codemirror.css";
 // // import for js
 import "codemirror/mode/javascript/javascript";
 import "codemirror/mode/python/python";
+import "codemirror/mode/clike/clike";
 
 // // import for theme
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import ACTIONS from "../Actions";
-import "codemirror/theme/monokai.css";
+import "codemirror/theme/material-darker.css";
 
 const Editor = ({ socketRef, id, onCodeChange }) => {
   const editorRef = useRef(null);
@@ -20,10 +21,10 @@ const Editor = ({ socketRef, id, onCodeChange }) => {
         document.getElementById("realtimeEditor"),
         {
           mode: {
-            name: "python",
+            name: "javascript",
             json: true,
           },
-          theme: "monokai",
+          theme: "material-darker",
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
