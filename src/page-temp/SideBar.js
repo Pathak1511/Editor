@@ -3,13 +3,23 @@ import language from "../data/language";
 import FolderStructure from "./FolderStructure";
 import useTraverseTree from "./../hooks/use-traverse-tree";
 import explorer from "./../data/folderData";
+import { addCode, insertNode } from "../store/slice/CodeSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 import Client from "./../components/Client";
 function SideBar({ clients }) {
-  const [explorerData, setExplorerData] = useState(explorer);
-  const { insertNode, deleteNode } = useTraverseTree();
+  const dispatch = useDispatch();
+  const data = useSelector((state) => {
+    return state.code;
+  });
+
+  const [explorerData, setExplorerData] = useState(data);
+  const { deleteNode } = useTraverseTree();
   const handleInsertNode = (folderId, item, isFolder) => {
-    const finalTree = insertNode(explorerData, folderId, item, isFolder);
-    setExplorerData(finalTree);
+    dispatch(
+      insertNode({ folderId: folderId, item: item, isFolder: isFolder })
+    );
+    setExplorerData(data);
   };
 
   const handleDeleteNode = (folderId, item) => {
@@ -21,7 +31,7 @@ function SideBar({ clients }) {
       <FolderStructure
         handleInsertNode={handleInsertNode}
         handleDeleteNode={handleDeleteNode}
-        explorer={explorerData}
+        explorer={data}
       />
 
       <h3 style={{ color: "#fff" }}>Connected</h3>

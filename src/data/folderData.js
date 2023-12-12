@@ -8,6 +8,7 @@ const explorer = {
       name: "main.cpp",
       isFolder: false,
       items: [],
+      file_content: "",
     },
   ],
 };

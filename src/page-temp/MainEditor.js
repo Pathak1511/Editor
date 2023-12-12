@@ -18,11 +18,21 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import BasicTabs from "../components/Tabs";
+import { updateFileContent } from "../store/slice/CodeSlice";
+import { selectTab } from "../store/slice/SelectTab";
+import { useDispatch, useSelector } from "react-redux";
+import explorer from "./../data/folderData";
 
 function MainEditor() {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => {
+    return state.code;
+  });
+
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
   const codeRef = useRef(null);
+  const tabId = useRef(String(0));
 
   const [expanded, setExpanded] = useState(false);
 
@@ -62,6 +72,10 @@ function MainEditor() {
     setOrigin({ ...origin, open: false });
   };
 
+  tabId.current = useSelector((state) => {
+    return state.tabs;
+  });
+
   const action = (
     <React.Fragment>
       <IconButton
@@ -76,18 +90,11 @@ function MainEditor() {
   );
 
   const onSendCode = async (Currentcode) => {
-    // send request to backend server for getting output
-
     setLoading(true);
 
     const client = piston({ server: "https://emkc.org" });
 
     const runtimes = await client.runtimes();
-
-    // const result = await client.execute(inputValue, Currentcode, {
-    //   args: [args],
-    // });
-
     const result = await client.execute({
       language: inputValue,
       files: [
@@ -141,6 +148,7 @@ function MainEditor() {
         id,
         username: JSON.parse(localStorage.getItem("userName")),
       });
+      console.log(JSON.parse(localStorage.getItem("userName")));
 
       // Listening for joined event
       socketRef.current.on(
@@ -229,8 +237,13 @@ function MainEditor() {
           <Editor
             socketRef={socketRef}
             id={id}
+            tabId={tabId.current}
+            data={data}
             onCodeChange={(code) => {
               codeRef.current = code;
+              dispatch(
+                updateFileContent({ id: tabId.current, file_content: code })
+              );
             }}
           />
         </div>

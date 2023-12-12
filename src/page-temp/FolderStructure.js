@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 function FolderStructure({ handleInsertNode, explorer }) {
   const [expand, setExpand] = useState("block");
@@ -86,11 +89,14 @@ function FolderStructure({ handleInsertNode, explorer }) {
           {showInput.visible && (
             <div className="inputContainer">
               <span>{showInput.isFolder ? "📁" : "📄"}</span>
-              <input
-                type="text"
+              <TextField
+                hiddenLabel
+                id="filled-hidden-label-small"
+                variant="filled"
+                size="small"
                 onKeyDown={onAddFolder}
                 onBlur={() => setShowInput({ ...showInput, visible: false })}
-                className="inputContainer__input"
+                // className="inputContainer__input"
                 autoFocus
               />
             </div>
@@ -115,7 +121,16 @@ function FolderStructure({ handleInsertNode, explorer }) {
         onClick={(e) => handleSelectItem(e, explorer.id) && toggleSelection()}
         onKeyDown={(e) => handleDeleteNode(e)}
       >
-        <span>📄 {explorer.name}</span>
+        <Button
+          size="small"
+          sx={{ "&:hover": { "& svg": { visibility: "visible" } } }}
+        >
+          📄 {explorer.name} &nbsp;&nbsp;{" "}
+          <OpenInNewIcon
+            sx={{ fontSize: 16, visibility: "hidden" }}
+            // onClick={() => handleFileOpen(explorer)}
+          />
+        </Button>
       </div>
     );
   }

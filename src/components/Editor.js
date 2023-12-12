@@ -13,7 +13,7 @@ import "codemirror/addon/edit/closebrackets";
 import ACTIONS from "../Actions";
 import "codemirror/theme/material-darker.css";
 
-const Editor = ({ socketRef, id, onCodeChange }) => {
+const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
   const editorRef = useRef(null);
   useEffect(() => {
     async function init() {
@@ -42,8 +42,6 @@ const Editor = ({ socketRef, id, onCodeChange }) => {
           });
         }
       });
-
-      //
     }
     init();
   }, []);
@@ -61,6 +59,14 @@ const Editor = ({ socketRef, id, onCodeChange }) => {
       socketRef.current.off(ACTIONS.CODE_CHANGE);
     };
   }, [socketRef.current]);
+
+  useEffect(() => {
+    const tabCode = parseInt(tabId, 10);
+    const tabContent = data.items[tabCode]?.file_content || "";
+    if (editorRef.current && tabContent !== editorRef.current.getValue()) {
+      editorRef.current.setValue(tabContent);
+    }
+  }, [tabId, data]);
 
   return <textarea id="realtimeEditor"></textarea>;
 };

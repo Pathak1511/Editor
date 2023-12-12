@@ -4,6 +4,10 @@ body {
   height: 100vh;
   position: relative;
 }
+.css-1knaqv7-MuiButtonBase-root-MuiButton-root,
+.css-1dxun5-MuiButtonBase-root-MuiButton-root {
+  text-transform: none !important;
+}
 .colorWhite {
   color: #f8f8f8;
 }
@@ -336,7 +340,7 @@ textarea {
 }
 
 .delete-button {
-  background: none;
+  /* background: none; */
   border: none;
   cursor: pointer;
   color: red; /* Change to your desired color */
@@ -358,14 +362,8 @@ textarea {
   margin-top: 5px;
 }
 
-.inputContainer__input {
-  margin: 6px 0 0px 0;
-  padding: 5px;
-  display: flex;
-  border: 1px solid lightgray;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
+#filled-hidden-label-small {
+  color: #fff !important;
 }
 
 .folder > span {
@@ -379,10 +377,12 @@ textarea {
 
 .file {
   margin-top: 5px;
-  padding-left: 5px;
+  padding-left: 0px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   color: #fff;
+  text-transform: none;
 }
 
 /* MainEditor Redesign */

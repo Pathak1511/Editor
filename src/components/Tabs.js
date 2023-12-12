@@ -1,16 +1,23 @@
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { selectTab } from "../store/slice/SelectTab";
+import { useDispatch, useSelector } from "react-redux";
+
 export default function DisabledTabs() {
-  const [value, setValue] = React.useState(2);
+  const dispatch = useDispatch();
+  const selectId = useSelector((state) => {
+    return state.tabs;
+  });
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    event.preventDefault();
+    dispatch(selectTab(String(newValue)));
   };
 
   return (
     <Tabs
-      value={value}
+      value={selectId * 1.0}
       onChange={handleChange}
       aria-label="disabled tabs example"
       sx={{ bgcolor: "#191919", height: "2px" }}
@@ -20,11 +27,11 @@ export default function DisabledTabs() {
         sx={{ color: "#808080", textTransform: "lowercase" }}
       />
       <Tab
-        label="index.html"
+        label="main.java"
         sx={{ color: "#808080", textTransform: "lowercase" }}
       />
       <Tab
-        label="index.css"
+        label="main.py"
         sx={{ color: "#808080", textTransform: "lowercase" }}
       />
     </Tabs>
