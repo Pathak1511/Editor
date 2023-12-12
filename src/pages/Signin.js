@@ -11,7 +11,6 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import CodeIcon from "@mui/icons-material/Code";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
@@ -72,8 +71,8 @@ export default function Signin() {
   };
 
   const joinRoom = async () => {
-    if (!id) {
-      await toast.error("Room id and username is required");
+    if (!id || !Password) {
+      await toast.error("Room id and password is required");
       return;
     }
     const valid = await validate();
@@ -94,6 +93,14 @@ export default function Signin() {
     var id = Math.random().toString(16).slice(2) + new Date().getTime();
     setId(id);
     toast.success("Created new room");
+  };
+
+  const logOut = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("Cookie");
+    localStorage.removeItem("userName");
+    toast.success("Log out Successfully");
+    navigate("/login");
   };
 
   return (
@@ -126,8 +133,13 @@ export default function Signin() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <CodeIcon />
+            <Avatar sx={{ m: 1, bgcolor: "#222" }}>
+              <img
+                src="/assests/main-logo.png"
+                alt="Logo"
+                height="50"
+                width="50"
+              />
             </Avatar>
             <Typography component="h1" variant="h5">
               Join Room
@@ -179,6 +191,9 @@ export default function Signin() {
                     Create One
                   </Link>
                 </Grid>
+                <Link href="/" variant="body2" onClick={logOut}>
+                  Log out
+                </Link>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
             </Box>

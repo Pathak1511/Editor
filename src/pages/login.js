@@ -103,8 +103,13 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: "#222" }}>
+            <img
+              src="/assests/main-logo.png"
+              alt="Logo"
+              height="50"
+              width="50"
+            />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
