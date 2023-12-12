@@ -5,7 +5,7 @@ import language from "../data/language";
 import { initSocket } from "../socket";
 import ACTIONS from "../Actions";
 import piston from "piston-client";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Fab from "@mui/material/Fab";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -23,7 +23,6 @@ function MainEditor() {
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
   const codeRef = useRef(null);
-  const location = useLocation();
 
   const [expanded, setExpanded] = useState(false);
 
@@ -140,14 +139,14 @@ function MainEditor() {
 
       socketRef.current.emit(ACTIONS.JOIN, {
         id,
-        username: location.state?.userName,
+        username: JSON.parse(localStorage.getItem("userName")),
       });
 
       // Listening for joined event
       socketRef.current.on(
         ACTIONS.JOINED,
         ({ clients, username, socketId }) => {
-          if (username !== location.state?.username) {
+          if (username !== JSON.parse(localStorage.getItem("userName"))) {
             toast.success(`${username} joined the room`);
           }
           setClients(clients);
@@ -186,12 +185,7 @@ function MainEditor() {
   }
 
   function leaveRoom() {
-    reactNavigation("/", {
-      state: {
-        userName: location.state?.userName,
-        Cookie: location.state?.Cookie,
-      },
-    });
+    reactNavigation("/");
   }
 
   return (
@@ -220,7 +214,7 @@ function MainEditor() {
             show={show}
             socketRef={socketRef}
             id={id}
-            userName={location.state?.userName}
+            userName={JSON.parse(localStorage.getItem("userName"))}
           />
         ) : (
           <div></div>

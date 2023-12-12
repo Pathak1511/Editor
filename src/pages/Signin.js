@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import Avatar from "@mui/material/Avatar";
@@ -15,6 +15,7 @@ import CodeIcon from "@mui/icons-material/Code";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function Copyright(props) {
   return (
@@ -37,27 +38,31 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Signin() {
+  const data = useSelector((state) => {
+    return state.users;
+  });
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const [id, setId] = useState("");
+  const [userName, setuserName] = useState(
+    JSON.parse(localStorage.getItem("userName"))
+  );
+  const [Password, setPassword] = useState("");
 
   useEffect(() => {
-    if (!location.state?.userName) {
+    if (!userName) {
       navigate("/login");
     }
   }, []);
 
-  const [id, setId] = useState("");
-  const [userName, setuserName] = useState(location.state?.userName);
-  const [Password, setPassword] = useState("");
-
   const validate = () => {
-    if (!location.state?.Cookie) {
+    if (!JSON.parse(localStorage.getItem("Cookie"))) {
       return "error";
     }
     try {
       axios.get("https://codeflow-3ir4.onrender.com/v1/auth/me", {
         headers: {
-          Authorization: `Bearer=${location.state?.Cookie}`,
+          Authorization: `Bearer=${JSON.parse(localStorage.getItem("Cookie"))}`,
         },
       });
       return "success";
@@ -68,17 +73,12 @@ export default function Signin() {
 
   const joinRoom = async () => {
     if (!id) {
-      toast.error("Room id and username is required");
+      await toast.error("Room id and username is required");
+      return;
     }
     const valid = await validate();
     if (valid === "success") {
-      console.log(userName, id, location.state?.Cookie);
-      navigate(`/editor/${id}`, {
-        state: {
-          userName: userName,
-          Cookie: location.state?.Cookie,
-        },
-      });
+      navigate(`/editor/${id}`);
     } else {
       toast.error("Unauthorized");
       navigate("/login");

@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { addUser } from "../store/slice/UserSlice";
+import { useDispatch } from "react-redux";
 
 function Copyright(props) {
   return (
@@ -39,6 +41,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -65,18 +68,26 @@ export default function Login() {
       .then((response) => {
         toast.success("Login successfully");
 
-        navigate("/", {
-          state: {
-            Cookie: response.data.content.meta.access_token,
-            userName: response.data.content.data.name,
-          },
-        });
+        localStorage.setItem(
+          "Cookie",
+          JSON.stringify(response.data.content.meta.access_token)
+        );
+        localStorage.setItem(
+          "userName",
+          JSON.stringify(response.data.content.data.name)
+        );
 
-        console.log(JSON.stringify(response.data));
+        // dispatch(
+        //   addUser({
+        //     Cookie: response.data.content.meta.access_token,
+        //     userName: response.data.content.data.name,
+        //   })
+        // );
+
+        navigate("/");
       })
       .catch((error) => {
         toast.error("Invalid email or password");
-        console.log(error);
       });
   };
 
