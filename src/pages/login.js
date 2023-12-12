@@ -8,7 +8,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -17,6 +16,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../store/slice/UserSlice";
 import { useDispatch } from "react-redux";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Copyright(props) {
   return (
@@ -43,9 +43,11 @@ const defaultTheme = createTheme();
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = new FormData(event.currentTarget);
 
     let body = JSON.stringify({
@@ -63,7 +65,7 @@ export default function Login() {
       data: body,
     };
 
-    axios
+    await axios
       .request(config)
       .then((response) => {
         toast.success("Login successfully");
@@ -89,6 +91,8 @@ export default function Login() {
       .catch((error) => {
         toast.error("Invalid email or password");
       });
+
+    setLoading(false);
   };
 
   return (
@@ -150,7 +154,14 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {loading ? (
+                <CircularProgress
+                  sx={{ color: "#222", width: "40px" }}
+                  size={24}
+                />
+              ) : (
+                "Sign In"
+              )}
             </Button>
             <Grid container>
               <Grid item xs>
