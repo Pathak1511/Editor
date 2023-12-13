@@ -5,6 +5,7 @@ import MainEditor from "./page-temp/MainEditor";
 import Dashboard from "./dashboard/Dashboard";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/login";
+import SignUp from "./pages/Signup";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/editor/:id" element={<MainEditor />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </>

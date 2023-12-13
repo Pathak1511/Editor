@@ -27,8 +27,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://github.com/Pathak1511">
+        Admin
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -44,16 +44,23 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const [chooseUsername, setChooseEmail] = React.useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
     const data = new FormData(event.currentTarget);
 
     let body = JSON.stringify({
-      name: data.get("email"),
+      username: data.get("username"),
+      email: data.get("email"),
       password: data.get("password"),
     });
+
+    // if ((!body.username && !body.email) || !body.password) {
+    //   toast.error("All field required");
+    //   return;
+    // }
+    setLoading(true);
 
     let config = {
       method: "post",
@@ -72,20 +79,12 @@ export default function Login() {
 
         localStorage.setItem(
           "Cookie",
-          JSON.stringify(response.data.content.meta.access_token)
+          JSON.stringify(response.data.content.meta_access_token)
         );
         localStorage.setItem(
           "userName",
-          JSON.stringify(response.data.content.data.name)
+          JSON.stringify(response.data.content.data.username)
         );
-
-        // dispatch(
-        //   addUser({
-        //     Cookie: response.data.content.meta.access_token,
-        //     userName: response.data.content.data.name,
-        //   })
-        // );
-
         navigate("/");
       })
       .catch((error) => {
@@ -128,9 +127,9 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
+              id={chooseUsername ? "username" : "email"}
+              label={chooseUsername ? "Enter Username" : "Enter Email"}
+              name={chooseUsername ? "username" : "email"}
               autoComplete="email"
               autoFocus
             />
@@ -145,8 +144,14 @@ export default function Login() {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              control={
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  onClick={() => setChooseEmail(!chooseUsername)}
+                />
+              }
+              label="Login with username ?"
             />
             <Button
               type="submit"
@@ -170,7 +175,7 @@ export default function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/sign-up" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
