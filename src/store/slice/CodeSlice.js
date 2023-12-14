@@ -44,16 +44,13 @@ const codeSlice = createSlice({
     removeCode(state, action) {
       state.splice(action.payload, 1);
     },
-    deleteCode(state, action) {
-      return [];
-    },
     insertNode: (state, action) => {
       const { folderId, item, isFolder } = action.payload;
 
       const findNode = (tree) => {
         if (tree.id === folderId && tree.isFolder) {
           tree.items.unshift({
-            id: new Date().getTime(),
+            id: new Date().getTime().toString(),
             name: item,
             isFolder,
             items: [],
@@ -74,7 +71,7 @@ const codeSlice = createSlice({
     },
 
     deleteNode: (state, action) => {
-      const nodeId = action.payload;
+      const { nodeId } = action.payload;
       const removeNode = (node) => {
         if (node.id === nodeId) {
           return null;
@@ -113,6 +110,6 @@ const codeSlice = createSlice({
 export default codeSlice.reducer;
 export const { addCode } = codeSlice.actions;
 export const { removeCode } = codeSlice.actions;
-export const { deleteCode } = codeSlice.actions;
+export const { deleteNode } = codeSlice.actions;
 export const { insertNode } = codeSlice.actions;
 export const { updateFileContent } = codeSlice.actions;

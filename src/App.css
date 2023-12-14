@@ -8,6 +8,10 @@ body {
 .css-1dxun5-MuiButtonBase-root-MuiButton-root {
   text-transform: none !important;
 }
+
+.css-i4bv87-MuiSvgIcon-root {
+  font-size: 1rem !important;
+}
 .colorWhite {
   color: #f8f8f8;
 }
@@ -379,10 +383,13 @@ textarea {
   margin-top: 5px;
   padding-left: 0px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   color: #fff;
   text-transform: none;
+}
+
+.file_btn:hover {
 }
 
 /* MainEditor Redesign */
@@ -420,9 +427,6 @@ textarea {
 }
 .Main_Container {
   display: flex;
-}
-.folder_container {
-  height: 40vh;
 }
 
 .folderStructure {

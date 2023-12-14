@@ -14,8 +14,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { addUser } from "../store/slice/UserSlice";
-import { useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function Copyright(props) {
@@ -41,7 +39,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const [chooseUsername, setChooseEmail] = React.useState(false);
@@ -55,11 +52,6 @@ export default function Login() {
       email: data.get("email"),
       password: data.get("password"),
     });
-
-    // if ((!body.username && !body.email) || !body.password) {
-    //   toast.error("All field required");
-    //   return;
-    // }
     setLoading(true);
 
     let config = {
@@ -76,10 +68,9 @@ export default function Login() {
       .request(config)
       .then((response) => {
         toast.success("Login successfully");
-
         localStorage.setItem(
           "Cookie",
-          JSON.stringify(response.data.content.meta_access_token)
+          JSON.stringify(response.data.content.meta.access_token)
         );
         localStorage.setItem(
           "userName",

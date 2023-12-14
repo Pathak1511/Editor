@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import language from "../data/language";
 import FolderStructure from "./FolderStructure";
 import useTraverseTree from "./../hooks/use-traverse-tree";
-import explorer from "./../data/folderData";
 import { addCode, insertNode } from "../store/slice/CodeSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,11 +27,13 @@ function SideBar({ clients }) {
 
   return (
     <div className="Sidebar">
-      <FolderStructure
-        handleInsertNode={handleInsertNode}
-        handleDeleteNode={handleDeleteNode}
-        explorer={data}
-      />
+      <div style={{ minHeight: "40vh" }}>
+        <FolderStructure
+          handleInsertNode={handleInsertNode}
+          handleDeleteNode={handleDeleteNode}
+          explorer={data}
+        />
+      </div>
 
       <h3 style={{ color: "#fff" }}>Connected</h3>
       <div className="clientList">

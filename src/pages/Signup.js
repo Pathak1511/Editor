@@ -77,7 +77,7 @@ export default function SignUp() {
 
           localStorage.setItem(
             "Cookie",
-            JSON.stringify(response.data.content.meta_access_token)
+            JSON.stringify(response.data.meta.access_token)
           );
           localStorage.setItem(
             "userName",

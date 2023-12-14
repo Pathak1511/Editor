@@ -13,8 +13,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "axios";
-import { useSelector } from "react-redux";
 
 function Copyright(props) {
   return (
@@ -37,9 +35,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Signin() {
-  const data = useSelector((state) => {
-    return state.users;
-  });
   const navigate = useNavigate();
 
   const [id, setId] = useState("");
@@ -47,41 +42,35 @@ export default function Signin() {
     JSON.parse(localStorage.getItem("userName"))
   );
   const [Password, setPassword] = useState("");
-
   useEffect(() => {
     if (!userName) {
       navigate("/login");
     }
   }, []);
 
-  const validate = () => {
-    if (!JSON.parse(localStorage.getItem("Cookie"))) {
-      return "error";
+  const generatePass = () => {
+    let pass = "";
+    let str =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+      "abcdefghijklmnopqrstuvwxyz" +
+      "0123456789" +
+      "!@#$%^&*():{}?";
+
+    for (let i = 1; i <= 20; i++) {
+      let char = Math.floor(Math.random() * str.length + 1);
+
+      pass += str.charAt(char);
     }
-    try {
-      axios.get("https://codeflow-3ir4.onrender.com/v1/auth/me", {
-        headers: {
-          Authorization: `Bearer=${JSON.parse(localStorage.getItem("Cookie"))}`,
-        },
-      });
-      return "success";
-    } catch (error) {
-      return "error";
-    }
+
+    return pass;
   };
 
-  const joinRoom = async () => {
+  const joinRoom = () => {
     if (!id || !Password) {
-      await toast.error("Room id and password is required");
+      toast.error("Room id and password is required");
       return;
     }
-    const valid = await validate();
-    if (valid === "success") {
-      navigate(`/editor/${id}`);
-    } else {
-      toast.error("Unauthorized");
-      navigate("/login");
-    }
+    navigate(`/editor/${id}`);
   };
 
   const handleInputEnter = (e) => {
@@ -92,6 +81,7 @@ export default function Signin() {
     e.preventDefault();
     var id = Math.random().toString(16).slice(2) + new Date().getTime();
     setId(id);
+    setPassword(generatePass());
     toast.success("Created new room");
   };
 

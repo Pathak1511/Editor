@@ -19,9 +19,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import BasicTabs from "../components/Tabs";
 import { updateFileContent } from "../store/slice/CodeSlice";
-import { selectTab } from "../store/slice/SelectTab";
 import { useDispatch, useSelector } from "react-redux";
-import explorer from "./../data/folderData";
 
 function MainEditor() {
   const dispatch = useDispatch();
@@ -148,7 +146,6 @@ function MainEditor() {
         id,
         username: JSON.parse(localStorage.getItem("userName")),
       });
-      console.log(JSON.parse(localStorage.getItem("userName")));
 
       // Listening for joined event
       socketRef.current.on(
