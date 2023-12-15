@@ -237,19 +237,6 @@ function MainEditor() {
               id={id}
               data={data}
             />
-
-            {/* <Editor
-              socketRef={socketRef}
-              id={id}
-              tabId={tabId.current}
-              data={data}
-              onCodeChange={(code) => {
-                codeRef.current = code;
-                dispatch(
-                  updateFileContent({ id: tabId.current, file_content: code })
-                );
-              }}
-            /> */}
           </div>
         </div>
         <div className="Output">
