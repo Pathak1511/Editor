@@ -38,6 +38,7 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
         if (origin !== "setValue") {
           socketRef.current.emit(ACTIONS.CODE_CHANGE, {
             id,
+            currentTabId: tabId,
             code,
           });
         }
@@ -48,8 +49,9 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
 
   useEffect(() => {
     if (socketRef.current) {
-      socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
-        if (code !== null) {
+      socketRef.current.on(ACTIONS.CODE_CHANGE, ({ currentTabId, code }) => {
+        console.log("currentTabId", currentTabId);
+        if (code !== null && currentTabId === tabId) {
           editorRef.current.setValue(code);
         }
       });
@@ -63,10 +65,10 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
   useEffect(() => {
     const tabCode = parseInt(tabId, 10);
     const tabContent = data.items[tabCode]?.file_content || "";
-    if (editorRef.current && tabContent !== editorRef.current.getValue()) {
+    if (editorRef.current) {
       editorRef.current.setValue(tabContent);
     }
-  }, [tabId, data]);
+  }, [tabId]);
 
   return <textarea id="realtimeEditor"></textarea>;
 };

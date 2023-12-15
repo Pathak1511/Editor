@@ -26,11 +26,17 @@ function MainEditor() {
   const data = useSelector((state) => {
     return state.code;
   });
+  // const currentTab = useSelector((state) => {
+  //   return state.tabs;
+  // });
 
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
   const codeRef = useRef(null);
-  const tabId = useRef(String(0));
+  // const tabId = useRef("0");
+  // // const handleChangeTabs = (id) => {
+  // //   tabId.current = id;
+  // // };
 
   const [expanded, setExpanded] = useState(false);
 
@@ -69,10 +75,6 @@ function MainEditor() {
     }
     setOrigin({ ...origin, open: false });
   };
-
-  tabId.current = useSelector((state) => {
-    return state.tabs;
-  });
 
   const action = (
     <React.Fragment>
@@ -229,20 +231,26 @@ function MainEditor() {
         <SideBar clients={clients} />
         <div className="RealTimeEditor">
           <div>
-            <BasicTabs />
+            <BasicTabs
+              codeRef={codeRef}
+              socketRef={socketRef}
+              id={id}
+              data={data}
+            />
+
+            {/* <Editor
+              socketRef={socketRef}
+              id={id}
+              tabId={tabId.current}
+              data={data}
+              onCodeChange={(code) => {
+                codeRef.current = code;
+                dispatch(
+                  updateFileContent({ id: tabId.current, file_content: code })
+                );
+              }}
+            /> */}
           </div>
-          <Editor
-            socketRef={socketRef}
-            id={id}
-            tabId={tabId.current}
-            data={data}
-            onCodeChange={(code) => {
-              codeRef.current = code;
-              dispatch(
-                updateFileContent({ id: tabId.current, file_content: code })
-              );
-            }}
-          />
         </div>
         <div className="Output">
           <div className="Output_Container">

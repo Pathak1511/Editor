@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const TabSlice = createSlice({
   name: "tabs",
-  initialState: [{ id: 0, file_name: "main.cpp" }],
+  initialState: [{ id: "0", file_name: "main.cpp" }],
   reducers: {
     selectTab(state, action) {
       return action.payload;

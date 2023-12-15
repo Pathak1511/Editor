@@ -12,21 +12,21 @@ const codeSlice = createSlice({
         name: "main.cpp",
         isFolder: false,
         items: [],
-        file_content: "",
+        file_content: "// main cpp code",
       },
       {
         id: "1",
         name: "main.java",
         isFolder: false,
         items: [],
-        file_content: "",
+        file_content: "// main java code",
       },
       {
         id: "2",
         name: "main.py",
         isFolder: false,
         items: [],
-        file_content: "",
+        file_content: "// main python code",
       },
     ],
   },
@@ -87,6 +87,7 @@ const codeSlice = createSlice({
 
     updateFileContent: (state, action) => {
       const { id, file_content } = action.payload;
+
       const updateFile = (node) => {
         if (node.id === id && !node.isFolder) {
           node.file_content = file_content;

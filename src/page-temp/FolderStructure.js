@@ -6,7 +6,8 @@ import TextField from "@mui/material/TextField";
 import CloseIcon from "@mui/icons-material/Close";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import { deleteNode, insertNode } from "../store/slice/CodeSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { removeTabs } from "../store/slice/SelectTab";
+import { useDispatch } from "react-redux";
 import { addNewTab } from "../store/slice/SelectTab";
 
 function FolderStructure({ explorer }) {
@@ -16,8 +17,6 @@ function FolderStructure({ explorer }) {
     visible: false,
     isFolder: null,
   });
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isSelected, setIsSelected] = useState(false);
 
   const onAddFolder = (e) => {
     if (e.keyCode === 13 && e.target.value) {
@@ -34,9 +33,7 @@ function FolderStructure({ explorer }) {
 
   const handleDeleteNode = (e, id) => {
     dispatch(deleteNode({ nodeId: id.toString() }));
-  };
-  const toggleSelection = () => {
-    setIsSelected(!isSelected);
+    dispatch(removeTabs({ id: id.toString() }));
   };
 
   const handleAddTabs = (id, file_name) => {
@@ -53,19 +50,11 @@ function FolderStructure({ explorer }) {
     });
   };
 
-  const handleSelectItem = (e, id) => {
-    e.stopPropagation();
-    setSelectedItem(id);
-  };
-
   if (explorer.isFolder) {
     return (
-      <div
-        className="folder_container"
-        onClick={(e) => handleSelectItem(e, explorer.id) && toggleSelection()}
-      >
+      <div className="folder_container">
         <div
-          className={`folder folderStructure ${isSelected ? "selected" : ""}`}
+          className={`folder folderStructure`}
           onClick={() => setExpand(!expand)}
         >
           <span>
@@ -132,7 +121,7 @@ function FolderStructure({ explorer }) {
   } else {
     return (
       <div
-        className={`file ${isSelected ? "selected" : ""}`}
+        className={`file `}
         onClick={(e) => handleAddTabs(explorer.id, explorer.name)}
         onKeyDown={(e) => handleDeleteNode(e)}
       >
