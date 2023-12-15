@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Copyright(props) {
   return (
@@ -37,8 +38,10 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = new FormData(event.currentTarget);
     const body = {
       email: data.get("email").toLowerCase(),
@@ -90,6 +93,8 @@ export default function SignUp() {
           toast.error("Error Occured");
         });
     }
+
+    setLoading(false);
   };
 
   return (
@@ -182,6 +187,14 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
+              {loading ? (
+                <CircularProgress
+                  sx={{ color: "#222", width: "40px" }}
+                  size={24}
+                />
+              ) : (
+                "Sign Up"
+              )}
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
