@@ -195,7 +195,6 @@ export default function SignUp() {
               ) : (
                 "Sign Up"
               )}
-              Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
