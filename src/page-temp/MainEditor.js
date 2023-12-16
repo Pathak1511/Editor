@@ -252,6 +252,7 @@ function MainEditor() {
 
             <Grid
               item
+              className="output_Container_scroll"
               style={{
                 overflow: "hidden",
               }}
