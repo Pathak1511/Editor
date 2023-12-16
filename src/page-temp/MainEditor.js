@@ -253,7 +253,7 @@ function MainEditor() {
             <Grid
               item
               style={{
-                overflow: "auto",
+                overflow: "hidden",
               }}
             >
               <Typography
