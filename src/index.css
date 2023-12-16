@@ -12,26 +12,16 @@ body {
   scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 }
 
-.output_Container_scroll {
-  --sb-track-color: #232e33;
-  --sb-thumb-color: #ec3e2d;
-  --sb-size: 2px;
-  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
-}
-
-body::-webkit-scrollbar,
-.output_Container_scroll {
+body::-webkit-scrollbar {
   width: var(--sb-size);
 }
 
-body::-webkit-scrollbar-track,
-.output_Container_scroll {
+body::-webkit-scrollbar-track {
   background: var(--sb-track-color);
   border-radius: 10px;
 }
 
-body::-webkit-scrollbar-thumb,
-.output_Container_scroll {
+body::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
   border-radius: 10px;
 }
