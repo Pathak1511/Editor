@@ -218,9 +218,9 @@ function MainEditor() {
         </Fab>
         {socketRef.current ? (
           <Chat
+            id={id}
             show={show}
             socketRef={socketRef}
-            id={id}
             userName={JSON.parse(localStorage.getItem("userName"))}
           />
         ) : (

@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
 
   socket.on(ACTIONS.CHAT, ({ msg }) => {
     console.log(ACTIONS.CHAT, msg);
-    io.emit(ACTIONS.CHAT, msg);
+    // io.emit(ACTIONS.CHAT, msg);
   });
 
   socket.on(ACTIONS.SYNC_CODE, ({ socketId, code }) => {

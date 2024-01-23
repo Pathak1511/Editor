@@ -3,7 +3,7 @@ import { Box, Fab, Grid } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ACTIONS from "../Actions";
 
-function Chat({ show, socketRef, userName }) {
+function Chat({ id, show, socketRef, userName }) {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const isEffectSetup = useRef(false);
@@ -30,6 +30,7 @@ function Chat({ show, socketRef, userName }) {
 
   const handleSendClick = () => {
     const msgobj = {
+      room_id: id,
       id: socketRef.current.id,
       inputText: inputText,
       userName: userName,
