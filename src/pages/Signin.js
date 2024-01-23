@@ -41,7 +41,7 @@ export default function Signin() {
   // const [userName, setuserName] = useState(
   //   JSON.parse(localStorage.getItem("userName"))
   // );
-  const [userName, setuserName] = useState("hritikPathak");
+  const [userName, setuserName] = useState("");
   const [Password, setPassword] = useState("");
   useEffect(() => {
     if (!userName) {
