@@ -38,23 +38,11 @@ function App() {
           <Route path="/create-coding-env" element={<Signin />} />
           <Route
             path="/"
-            element={
-              JSON.parse(localStorage.getItem("userName")) ? (
-                <Dashboard />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={userName ? <Dashboard /> : <Navigate to="/login" />}
           />
           <Route
             path="/editor/:id"
-            element={
-              JSON.parse(localStorage.getItem("userName")) ? (
-                <MainEditor />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={userName ? <MainEditor /> : <Navigate to="/login" />}
           />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
