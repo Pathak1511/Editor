@@ -11,12 +11,12 @@ import FuzzyOverlayError from "./dashboard/Error";
 
 function App() {
   const [userName, setUserName] = useState(
-    JSON.parse(localStorage.getItem("userName"))
+    JSON.parse(localStorage.getItem("userName") || null)
   );
 
   useEffect(() => {
     setUserName(JSON.parse(localStorage.getItem("userName")));
-  });
+  }, []);
 
   return (
     <>
