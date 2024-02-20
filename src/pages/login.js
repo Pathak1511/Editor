@@ -76,13 +76,12 @@ export default function Login() {
           "userName",
           JSON.stringify(response.data.content.data.username)
         );
-        if (localStorage.getItem("userName")) {
-          navigate("/");
-        }
       })
       .catch((error) => {
         toast.error("Invalid email or password");
+        return;
       });
+    navigate("/");
 
     setLoading(false);
   };
