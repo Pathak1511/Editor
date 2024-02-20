@@ -72,7 +72,7 @@ function Header({
             size="small"
             onClick={copyId}
           >
-            Share
+            Copy
           </Button>
           <Button
             variant="contained"

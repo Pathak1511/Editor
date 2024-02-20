@@ -61,7 +61,9 @@ function Chat({ id, show, socketRef, userName }) {
                   .reverse()
                   .map((message, index) =>
                     message.isJoined ? (
-                      <div className="joined">{message.text}</div>
+                      <div className="joined" key={index}>
+                        {message.text}
+                      </div>
                     ) : (
                       <div
                         key={index}

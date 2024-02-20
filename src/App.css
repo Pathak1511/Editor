@@ -1,5 +1,4 @@
 /* common color */
-
 body {
   height: 100vh;
   position: relative;
@@ -499,5 +498,16 @@ textarea {
   .chat-icon {
     position: fixed;
     z-index: 4;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .cards {
+    flex-direction: column !important;
+    gap: 16px !important;
+    height: 100% !important;
+  }
+  .EnvCard {
+    width: 100% !important;
   }
 }

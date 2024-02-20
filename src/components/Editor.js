@@ -11,10 +11,12 @@ import "codemirror/mode/clike/clike";
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import ACTIONS from "../Actions";
+import toast from "react-hot-toast";
 import "codemirror/theme/material-darker.css";
 
-const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
+const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
   const editorRef = useRef(null);
+  const userName = JSON.parse(localStorage.getItem("userName"));
   useEffect(() => {
     async function init() {
       editorRef.current = await Codemirror.fromTextArea(
@@ -40,6 +42,7 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
             id,
             currentTabId: tabId,
             code,
+            userName,
           });
         }
       });
@@ -49,12 +52,14 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
 
   useEffect(() => {
     if (socketRef.current) {
-      socketRef.current.on(ACTIONS.CODE_CHANGE, ({ currentTabId, code }) => {
-        console.log("currentTabId", currentTabId);
-        if (code !== null && currentTabId === tabId) {
-          editorRef.current.setValue(code);
+      socketRef.current.on(
+        ACTIONS.CODE_CHANGE,
+        ({ currentTabId, code, userName }) => {
+          if (code !== "" && currentTabId === tabId && isadmin === false) {
+            editorRef.current.setValue(code);
+          }
         }
-      });
+      );
     }
 
     return () => {
@@ -64,8 +69,8 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data }) => {
 
   useEffect(() => {
     const tabCode = parseInt(tabId, 10);
-    const tabContent = data.items[tabCode]?.file_content || "";
-    if (editorRef.current) {
+    const tabContent = data.items[tabCode]?.file_content;
+    if (editorRef.current && isadmin === false) {
       editorRef.current.setValue(tabContent);
     }
   }, [tabId]);

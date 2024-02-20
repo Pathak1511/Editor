@@ -1,13 +1,23 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Signin from "./pages/Signin";
 import MainEditor from "./page-temp/MainEditor";
 import Dashboard from "./dashboard/Dashboard";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/login";
 import SignUp from "./pages/Signup";
+import { useEffect, useState } from "react";
+import FuzzyOverlayError from "./dashboard/Error";
 
 function App() {
+  const [userName, setUserName] = useState(
+    JSON.parse(localStorage.getItem("userName"))
+  );
+
+  useEffect(() => {
+    setUserName(JSON.parse(localStorage.getItem("userName")));
+  });
+
   return (
     <>
       {/* toast */}
@@ -25,11 +35,30 @@ function App() {
       </div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signin />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/editor/:id" element={<MainEditor />} />
+          <Route path="/create-coding-env" element={<Signin />} />
+          <Route
+            path="/"
+            element={
+              JSON.parse(localStorage.getItem("userName")) ? (
+                <Dashboard />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/editor/:id"
+            element={
+              JSON.parse(localStorage.getItem("userName")) ? (
+                <MainEditor />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="*" element={<FuzzyOverlayError error={true} />} />
         </Routes>
       </BrowserRouter>
     </>

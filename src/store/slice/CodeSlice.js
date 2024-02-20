@@ -105,6 +105,10 @@ const codeSlice = createSlice({
 
       updateFile(state);
     },
+
+    setCodeState: (state, action) => {
+      return action.payload;
+    },
   },
 });
 
@@ -114,3 +118,4 @@ export const { removeCode } = codeSlice.actions;
 export const { deleteNode } = codeSlice.actions;
 export const { insertNode } = codeSlice.actions;
 export const { updateFileContent } = codeSlice.actions;
+export const { setCodeState } = codeSlice.actions;

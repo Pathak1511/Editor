@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import Fab from "@mui/material/Fab";
 import ChatIcon from "@mui/icons-material/Chat";
 import Chat from "./../components/Chat";
-import Editor from "./../components/Editor";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -18,7 +17,6 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import BasicTabs from "../components/Tabs";
-import { updateFileContent } from "../store/slice/CodeSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function MainEditor() {
@@ -26,17 +24,10 @@ function MainEditor() {
   const data = useSelector((state) => {
     return state.code;
   });
-  // const currentTab = useSelector((state) => {
-  //   return state.tabs;
-  // });
 
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
   const codeRef = useRef(null);
-  // const tabId = useRef("0");
-  // // const handleChangeTabs = (id) => {
-  // //   tabId.current = id;
-  // // };
 
   const [expanded, setExpanded] = useState(false);
 
@@ -61,6 +52,7 @@ function MainEditor() {
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState("none");
   const [args, setArgs] = useState("");
+  const [isadmin, setAdmin] = useState(false);
 
   const [origin, setOrigin] = React.useState({
     open: false,
@@ -141,7 +133,7 @@ function MainEditor() {
       function handleErrors(e) {
         console.log("socket error", e);
         toast.error("Socket connection failed,try again later");
-        reactNavigation("/");
+        reactNavigation("/create-coding-env");
       }
 
       socketRef.current.emit(ACTIONS.JOIN, {
@@ -152,7 +144,8 @@ function MainEditor() {
       // Listening for joined event
       socketRef.current.on(
         ACTIONS.JOINED,
-        ({ clients, username, socketId }) => {
+        ({ clients, username, socketId, admin }) => {
+          setAdmin(admin);
           if (username !== JSON.parse(localStorage.getItem("userName"))) {
             toast.success(`${username} joined the room`);
           }
@@ -192,7 +185,7 @@ function MainEditor() {
   }
 
   function leaveRoom() {
-    reactNavigation("/");
+    reactNavigation("/create-coding-env");
   }
 
   return (
@@ -236,6 +229,7 @@ function MainEditor() {
               socketRef={socketRef}
               id={id}
               data={data}
+              isadmin={isadmin}
             />
           </div>
         </div>

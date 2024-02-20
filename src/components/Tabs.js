@@ -8,7 +8,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
 import Editor from "./Editor";
 
-export default function DisabledTabs({ socketRef, id, data, codeRef }) {
+export default function DisabledTabs({
+  socketRef,
+  id,
+  data,
+  codeRef,
+  isadmin,
+}) {
   const dispatch = useDispatch();
   let selectId = useSelector((state) => {
     return state.tabs;
@@ -28,7 +34,6 @@ export default function DisabledTabs({ socketRef, id, data, codeRef }) {
     dispatch(removeTabs({ id: newValue }));
     codeRef.current = "";
     setTab(selectId[selectId.length - 2]?.id);
-    console.log(selectId[selectId.length - 2]?.id);
     tabId.current = selectId[selectId.length - 2]?.id;
   };
 
@@ -74,6 +79,7 @@ export default function DisabledTabs({ socketRef, id, data, codeRef }) {
           id={id}
           data={data}
           tabId={tabId.current}
+          isadmin={isadmin}
           onCodeChange={(code) => {
             codeRef.current = code;
             dispatch(

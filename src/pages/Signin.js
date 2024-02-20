@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import Avatar from "@mui/material/Avatar";
@@ -13,6 +13,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -36,12 +37,17 @@ const defaultTheme = createTheme();
 
 export default function Signin() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [id, setId] = useState("");
+  const [id, setId] = useState(location.state?.room_id || "");
+  const [fromMainPage, setIsfromMainPage] = useState(
+    location.state?.fromMainPage || false
+  );
+  const [roomName, setRoomName] = useState("");
   const [userName, setuserName] = useState(
     JSON.parse(localStorage.getItem("userName"))
   );
-  const [Password, setPassword] = useState("");
+  const [Password, setPassword] = useState(location.state?.password || "");
   useEffect(() => {
     if (!userName) {
       navigate("/login");
@@ -70,7 +76,32 @@ export default function Signin() {
       toast.error("Room id and password is required");
       return;
     }
-    navigate(`/editor/${id}`);
+
+    if (fromMainPage) {
+      axios
+        .post(
+          "https://codeflow-3ir4.onrender.com/v1/room",
+          {
+            env: location.state?.env || "Custom Room",
+            room_id: id,
+            room_name: roomName,
+          },
+          {
+            headers: {
+              Authorization: `Bearer=${JSON.parse(
+                localStorage.getItem("Cookie")
+              )}`,
+            },
+          }
+        )
+        .then(
+          (response) => toast.success("New Room Created"),
+          navigate(`/editor/${id}`)
+        )
+        .catch((error) => console.log(error));
+    } else {
+      navigate(`/editor/${id}`);
+    }
   };
 
   const handleInputEnter = (e) => {
@@ -123,7 +154,10 @@ export default function Signin() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "#222" }}>
+            <Avatar
+              sx={{ m: 1, bgcolor: "#222", cursor: "pointer" }}
+              onClick={() => navigate("/")}
+            >
               <img
                 src="/assests/main-logo.png"
                 alt="Logo"
@@ -135,6 +169,16 @@ export default function Signin() {
               Join Room
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Room Name"
+                onChange={(e) => setRoomName(e.target.value)}
+                value={roomName}
+                onKeyUp={handleInputEnter}
+                style={{ display: fromMainPage ? "" : "none" }}
+              />
               <TextField
                 margin="normal"
                 required
@@ -172,7 +216,7 @@ export default function Signin() {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={joinRoom}
               >
-                Join
+                {fromMainPage ? "Create" : "Join"}
               </Button>
               <Grid container>
                 <Grid item xs>
