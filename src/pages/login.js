@@ -76,9 +76,6 @@ export default function Login() {
           JSON.stringify(response.data.content.data.username)
         );
         return "success";
-        // setTimeout(function () {
-        //   navigate("/");
-        // }, 1500);
       })
       .catch((error) => {
         return "error";

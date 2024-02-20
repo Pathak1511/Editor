@@ -1,7 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import axios from "axios";
+
+const insertData = (data) => {
+  let cookie = JSON.parse(localStorage.getItem("Cookie"));
+  axios
+    .post(
+      "https://codeflow-3ir4.onrender.com/v1/Kanban/insert-Kanban",
+      { kanban: data },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer=${cookie}`,
+        },
+      }
+    )
+    .then((response) => console.log("Inserted successfully"))
+    .catch((err) => console.error(`Error while insertion`));
+};
 
 export const CustomKanban = () => {
   return (
@@ -12,7 +31,40 @@ export const CustomKanban = () => {
 };
 
 const Board = () => {
-  const [cards, setCards] = useState(DEFAULT_CARDS);
+  const [cards, setCards] = useState([]);
+
+  const handleDelete = (id) => {
+    const newList = cards.filter((c) => c.id !== id);
+    setCards(newList);
+    insertData(newList);
+  };
+
+  const fetchData = useMemo(() => {
+    return async () => {
+      let cookie = JSON.parse(localStorage.getItem("Cookie"));
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "https://codeflow-3ir4.onrender.com/v1/Kanban/get-kanban",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer=${cookie}`,
+        },
+      };
+      axios
+        .request(config)
+        .then((response) => {
+          setCards(response.data.data[0].kanban);
+        })
+        .catch((error) => {
+          console.log("error in kanban", error);
+        });
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12">
@@ -44,13 +96,18 @@ const Board = () => {
         cards={cards}
         setCards={setCards}
       />
-      <BurnBarrel setCards={setCards} />
+      <BurnBarrel setCards={setCards} handleDelete={handleDelete} />
     </div>
   );
 };
 
 const Column = ({ title, headingColor, cards, column, setCards }) => {
   const [active, setActive] = useState(false);
+
+  const handleEvent = (newCard) => {
+    const newCardAdded = [...cards, newCard];
+    insertData(newCardAdded);
+  };
 
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData("cardId", card.id);
@@ -68,25 +125,32 @@ const Column = ({ title, headingColor, cards, column, setCards }) => {
     const before = element.dataset.before || "-1";
 
     if (before !== cardId) {
+      // actual data
       let copy = [...cards];
-
+      // data which need to transfer
       let cardToTransfer = copy.find((c) => c.id === cardId);
+
       if (!cardToTransfer) return;
+      // the column in which it gets transfer is added here
+
       cardToTransfer = { ...cardToTransfer, column };
-
       copy = copy.filter((c) => c.id !== cardId);
-
       const moveToBack = before === "-1";
 
       if (moveToBack) {
+        // update send to database
         copy.push(cardToTransfer);
       } else {
         const insertAtIndex = copy.findIndex((el) => el.id === before);
-        if (insertAtIndex === undefined) return;
+        if (insertAtIndex === undefined) {
+          return;
+        }
+        // if deleted then insertAtIndex is undefined
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
 
       setCards(copy);
+      insertData(copy);
     }
   };
 
@@ -170,7 +234,11 @@ const Column = ({ title, headingColor, cards, column, setCards }) => {
           return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
         })}
         <DropIndicator beforeId={null} column={column} />
-        <AddCard column={column} setCards={setCards} />
+        <AddCard
+          column={column}
+          setCards={setCards}
+          handleEvent={handleEvent}
+        />
       </div>
     </div>
   );
@@ -203,7 +271,7 @@ const DropIndicator = ({ beforeId, column }) => {
   );
 };
 
-const BurnBarrel = ({ setCards }) => {
+const BurnBarrel = ({ setCards, handleDelete }) => {
   const [active, setActive] = useState(false);
 
   const handleDragOver = (e) => {
@@ -217,9 +285,7 @@ const BurnBarrel = ({ setCards }) => {
 
   const handleDragEnd = (e) => {
     const cardId = e.dataTransfer.getData("cardId");
-
-    setCards((pv) => pv.filter((c) => c.id !== cardId));
-
+    handleDelete(cardId);
     setActive(false);
   };
 
@@ -239,7 +305,7 @@ const BurnBarrel = ({ setCards }) => {
   );
 };
 
-const AddCard = ({ column, setCards }) => {
+const AddCard = ({ column, setCards, handleEvent }) => {
   const [text, setText] = useState("");
   const [adding, setAdding] = useState(false);
 
@@ -255,7 +321,7 @@ const AddCard = ({ column, setCards }) => {
     };
 
     setCards((pv) => [...pv, newCard]);
-
+    handleEvent(newCard);
     setAdding(false);
   };
 
@@ -298,38 +364,3 @@ const AddCard = ({ column, setCards }) => {
     </>
   );
 };
-
-const DEFAULT_CARDS = [
-  // BACKLOG
-  {
-    title: "Development component with react diff view",
-    id: "11",
-    column: "backlog",
-  },
-  {
-    title: "Service to run development environment",
-    id: "12",
-    column: "backlog",
-  },
-  // TODO
-  {
-    title: "Backend services for dashboard",
-    id: "5",
-    column: "todo",
-  },
-  { title: "backend service for video call features", id: "6", column: "todo" },
-
-  // DOING
-  {
-    title: "UI for dashboard and VideoCall",
-    id: "8",
-    column: "doing",
-  },
-  { title: "Dashboard UI and Error components", id: "9", column: "doing" },
-  // DONE
-  {
-    title: "Backend Service of Chat applications",
-    id: "10",
-    column: "done",
-  },
-];
