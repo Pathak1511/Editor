@@ -83,7 +83,6 @@ const Column = ({ title, headingColor, cards, column, setCards }) => {
       } else {
         const insertAtIndex = copy.findIndex((el) => el.id === before);
         if (insertAtIndex === undefined) return;
-
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
 
@@ -305,14 +304,6 @@ const DEFAULT_CARDS = [
   {
     title: "Development component with react diff view",
     id: "11",
-    column: "backlog",
-  },
-  { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
-  { title: "Room Componets is not created", id: "2", column: "backlog" },
-  { title: "Member components is not created", id: "3", column: "backlog" },
-  {
-    title: "Notifications Components is not created",
-    id: "4",
     column: "backlog",
   },
   {

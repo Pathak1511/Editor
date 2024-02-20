@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -40,8 +40,8 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
-  const [chooseUsername, setChooseEmail] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [chooseUsername, setChooseEmail] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,10 +64,9 @@ export default function Login() {
       data: body,
     };
 
-    await axios
+    const authorize = await axios
       .request(config)
       .then((response) => {
-        toast.success("Login successfully");
         localStorage.setItem(
           "Cookie",
           JSON.stringify(response.data.content.meta.access_token)
@@ -76,13 +75,20 @@ export default function Login() {
           "userName",
           JSON.stringify(response.data.content.data.username)
         );
+        return "success";
+        // setTimeout(function () {
+        //   navigate("/");
+        // }, 1500);
       })
       .catch((error) => {
-        toast.error("Invalid email or password");
-        return;
+        return "error";
       });
-    navigate("/");
-
+    if (authorize === "success") {
+      toast.success("Login successfully");
+      navigate("/");
+    } else {
+      toast.error("Invalid email or password");
+    }
     setLoading(false);
   };
 
