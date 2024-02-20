@@ -85,7 +85,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Dashboard() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("dashboard");
   const [notificationCount, setNotificationCount] = useState(0);
 
