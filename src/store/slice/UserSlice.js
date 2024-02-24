@@ -2,13 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
   name: "user",
-  initialState: [],
+  initialState: {
+    isAuthorized: false,
+  },
   reducers: {
     addUser(state, action) {
-      state.push(action.payload);
+      state.isAuthorized = action.payload;
     },
     removeUser(state, action) {
-      state.splice(action.payload, 1);
+      // state.splice(action.payload, 1);
+      state.isAuthorized = false;
     },
     deleteUsers(state, action) {
       return [];

@@ -11,12 +11,15 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
-
+import { useDispatch } from "react-redux";
+import { removeUser } from "../store/slice/UserSlice";
 export default function ListItems({ changeTab, tab }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logOut = (e) => {
     e.preventDefault();
+    dispatch(removeUser(false));
     localStorage.removeItem("Cookie");
     localStorage.removeItem("userName");
     toast.success("Log out Successfully");

@@ -15,6 +15,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useDispatch } from "react-redux";
+import { addUser } from "../store/slice/UserSlice";
 
 function Copyright(props) {
   return (
@@ -39,6 +41,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [chooseUsername, setChooseEmail] = useState(false);
@@ -75,16 +78,18 @@ export default function Login() {
           "userName",
           JSON.stringify(response.data.content.data.username)
         );
+        dispatch(addUser(true));
         return "success";
       })
       .catch((error) => {
         return "error";
       });
-    if (authorize === "success") {
-      toast.success("Login successfully");
-      navigate("/");
-    } else {
+
+    if (authorize === "error") {
       toast.error("Invalid email or password");
+    } else {
+      navigate("/");
+      toast.success("Login Successfully");
     }
     setLoading(false);
   };

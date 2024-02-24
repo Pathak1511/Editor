@@ -13,6 +13,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import { useDispatch } from "react-redux";
+import { removeUser } from "../store/slice/UserSlice";
 import axios from "axios";
 
 function Copyright(props) {
@@ -38,6 +41,7 @@ const defaultTheme = createTheme();
 export default function Signin() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const [id, setId] = useState(location.state?.room_id || "");
   const [fromMainPage, setIsfromMainPage] = useState(
@@ -118,6 +122,7 @@ export default function Signin() {
 
   const logOut = (e) => {
     e.preventDefault();
+    dispatch(removeUser(false));
     localStorage.removeItem("Cookie");
     localStorage.removeItem("userName");
     toast.success("Log out Successfully");
