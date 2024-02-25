@@ -55,7 +55,7 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
       socketRef.current.on(
         ACTIONS.CODE_CHANGE,
         ({ currentTabId, code, userName }) => {
-          if (code !== "" && currentTabId === tabId && isadmin === false) {
+          if (code !== "" && currentTabId === tabId) {
             editorRef.current.setValue(code);
           }
         }
@@ -70,7 +70,7 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
   useEffect(() => {
     const tabCode = parseInt(tabId, 10);
     const tabContent = data.items[tabCode]?.file_content;
-    if (editorRef.current && isadmin === false) {
+    if (editorRef.current) {
       editorRef.current.setValue(tabContent);
     }
   }, [tabId]);
