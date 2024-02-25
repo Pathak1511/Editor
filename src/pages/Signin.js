@@ -45,64 +45,51 @@ export default function Signin() {
 
   const [id, setId] = useState(location.state?.room_id || "");
   const [fromMainPage, setIsfromMainPage] = useState(
-    location.state?.fromMainPage || false
+    location.state?.fromMainPage
   );
   const [roomName, setRoomName] = useState("");
   const [userName, setuserName] = useState(
     JSON.parse(localStorage.getItem("userName"))
   );
-  const [Password, setPassword] = useState(location.state?.password || "");
   useEffect(() => {
     if (!userName) {
       navigate("/login");
     }
   }, []);
 
-  const generatePass = () => {
-    let pass = "";
-    let str =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-      "abcdefghijklmnopqrstuvwxyz" +
-      "0123456789" +
-      "!@#$%^&*():{}?";
-
-    for (let i = 1; i <= 20; i++) {
-      let char = Math.floor(Math.random() * str.length + 1);
-
-      pass += str.charAt(char);
-    }
-
-    return pass;
-  };
-
-  const joinRoom = () => {
-    if (!id || !Password) {
-      toast.error("Room id and password is required");
+  const joinRoom = (e) => {
+    e.preventDefault();
+    if (!id) {
+      toast.error("Room id is required");
       return;
     }
 
     if (fromMainPage) {
-      axios
-        .post(
-          "https://codeflow-3ir4.onrender.com/v1/room",
-          {
-            env: location.state?.env || "Custom Room",
-            room_id: id,
-            room_name: roomName,
-          },
-          {
-            headers: {
-              Authorization: `Bearer=${JSON.parse(
-                localStorage.getItem("Cookie")
-              )}`,
+      if (roomName === "") {
+        toast.error("Room Name is required");
+      } else {
+        axios
+          .post(
+            "https://codeflow-3ir4.onrender.com/v1/room",
+            {
+              env: location.state?.env || "Custom Room",
+              room_id: id,
+              room_name: roomName,
             },
-          }
-        )
-        .then(
-          (response) => toast.success("New Room Created"),
-          navigate(`/editor/${id}`)
-        )
-        .catch((error) => console.log(error));
+            {
+              headers: {
+                Authorization: `Bearer=${JSON.parse(
+                  localStorage.getItem("Cookie")
+                )}`,
+              },
+            }
+          )
+          .then(
+            (response) => toast.success("New Room Created"),
+            navigate(`/editor/${id}`)
+          )
+          .catch((error) => console.log(error));
+      }
     } else {
       navigate(`/editor/${id}`);
     }
@@ -116,7 +103,6 @@ export default function Signin() {
     e.preventDefault();
     var id = Math.random().toString(16).slice(2) + new Date().getTime();
     setId(id);
-    setPassword(generatePass());
     toast.success("Created new room");
   };
 
@@ -126,6 +112,8 @@ export default function Signin() {
     localStorage.removeItem("Cookie");
     localStorage.removeItem("userName");
     toast.success("Log out Successfully");
+    localStorage.removeItem("isAuthorized");
+
     navigate("/login");
   };
 
@@ -203,16 +191,6 @@ export default function Signin() {
                 value={userName}
                 onKeyUp={handleInputEnter}
                 disabled
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                label="Password"
-                type="text"
-                onChange={(e) => setPassword(e.target.value)}
-                value={Password}
-                onKeyUp={handleInputEnter}
               />
               <Button
                 type="submit"

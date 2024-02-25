@@ -77,7 +77,6 @@ export default function Login() {
           JSON.stringify(response.data.content.data.username)
         );
         localStorage.setItem("isAuthorized", true);
-        window.location.reload();
         return "success";
       })
       .catch((error) => {
@@ -87,7 +86,11 @@ export default function Login() {
     if (authorize === "error") {
       toast.error("Invalid email or password");
     } else {
-      navigate("/");
+      if (window.location.pathname !== "/login") {
+        window.location.reload();
+      } else {
+        navigate("/");
+      }
       toast.success("Login Successfully");
     }
     setLoading(false);
