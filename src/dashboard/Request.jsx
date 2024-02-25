@@ -14,6 +14,7 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import BackendAPI from "../hooks/api";
 
 export default function Request({ url, btn, isnotify, setNotificationCounts }) {
   const columns = [
@@ -104,7 +105,7 @@ export default function Request({ url, btn, isnotify, setNotificationCounts }) {
     const cookie = JSON.parse(localStorage.getItem("Cookie"));
     axios
       .post(
-        "https://codeflow-3ir4.onrender.com/v1/Notification/send-notification",
+        `${BackendAPI}/v1/Notification/send-notification`,
         {
           to: to,
           community: community,
@@ -125,10 +126,7 @@ export default function Request({ url, btn, isnotify, setNotificationCounts }) {
 
   const acceptInvite = (data) => {
     axios
-      .post(
-        "https://codeflow-3ir4.onrender.com/v1/Notification/accept-notifications",
-        data
-      )
+      .post(`${BackendAPI}/v1/Notification/accept-notifications`, data)
       .then(
         (response) => console.log(response.data),
         toast.success("Invite accepted successfully"),
@@ -195,10 +193,10 @@ export default function Request({ url, btn, isnotify, setNotificationCounts }) {
                             tabIndex={-1}
                             key={row.room_id + row.environment}
                           >
-                            {columns.map((column) => {
+                            {columns.map((column, ind) => {
                               const value = row[column.id];
                               return (
-                                <TableCell key={column.id} align={column.align}>
+                                <TableCell key={ind} align={column.align}>
                                   {column.format &&
                                   typeof value === "number" ? (
                                     column.format(value)

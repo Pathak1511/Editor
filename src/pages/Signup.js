@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import BackendAPI from "../hooks/api";
 
 function Copyright(props) {
   return (
@@ -64,7 +65,7 @@ export default function SignUp() {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://codeflow-3ir4.onrender.com/v1/auth/signup",
+        url: `${BackendAPI}/v1/auth/signup`,
         headers: {
           "Content-Type": "application/json",
         },

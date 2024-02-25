@@ -4,12 +4,13 @@ import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import BackendAPI from "../hooks/api";
 
 const insertData = (data) => {
   let cookie = JSON.parse(localStorage.getItem("Cookie"));
   axios
     .post(
-      "https://codeflow-3ir4.onrender.com/v1/Kanban/insert-Kanban",
+      `${BackendAPI}/v1/Kanban/insert-Kanban`,
       { kanban: data },
       {
         headers: {
@@ -45,7 +46,7 @@ const Board = () => {
       let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url: "https://codeflow-3ir4.onrender.com/v1/Kanban/get-kanban",
+        url: `${BackendAPI}/v1/Kanban/get-kanban`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer=${cookie}`,

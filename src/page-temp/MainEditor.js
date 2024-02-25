@@ -18,12 +18,16 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import BasicTabs from "../components/Tabs";
 import { useDispatch, useSelector } from "react-redux";
+import Login from "../pages/login";
 
 function MainEditor() {
   const dispatch = useDispatch();
   const data = useSelector((state) => {
     return state.code;
   });
+  const [user, setuser] = useState(
+    localStorage.getItem("isAuthorized") || false
+  );
 
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
@@ -186,6 +190,10 @@ function MainEditor() {
 
   function leaveRoom() {
     reactNavigation("/create-coding-env");
+  }
+
+  if (!user) {
+    return <Login />;
   }
 
   return (

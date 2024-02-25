@@ -15,8 +15,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useDispatch } from "react-redux";
-import { addUser } from "../store/slice/UserSlice";
+import BackendAPI from "../hooks/api";
 
 function Copyright(props) {
   return (
@@ -41,7 +40,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [chooseUsername, setChooseEmail] = useState(false);
@@ -60,7 +58,7 @@ export default function Login() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "https://codeflow-3ir4.onrender.com/v1/auth/signin",
+      url: `${BackendAPI}/v1/auth/signin`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -78,7 +76,8 @@ export default function Login() {
           "userName",
           JSON.stringify(response.data.content.data.username)
         );
-        dispatch(addUser(true));
+        localStorage.setItem("isAuthorized", true);
+        window.location.reload();
         return "success";
       })
       .catch((error) => {

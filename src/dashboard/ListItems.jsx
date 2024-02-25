@@ -22,6 +22,7 @@ export default function ListItems({ changeTab, tab }) {
     dispatch(removeUser(false));
     localStorage.removeItem("Cookie");
     localStorage.removeItem("userName");
+    localStorage.removeItem("isAuthorized");
     toast.success("Log out Successfully");
     navigate("/login");
   };
