@@ -21,7 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Login from "../pages/login";
 import axios from "axios";
 import BackendAPI from "../hooks/api";
-import { setCodeState } from "../store/slice/CodeSlice";
+import { setCodeState, setState } from "../store/slice/CodeSlice";
+import { setTab } from "../store/slice/SelectTab";
 
 function MainEditor() {
   const dispatch = useDispatch();
@@ -207,6 +208,8 @@ function MainEditor() {
   }
 
   function leaveRoom() {
+    dispatch(setState({ set: true }));
+    dispatch(setTab({ set: true }));
     reactNavigation("/create-coding-env");
   }
 

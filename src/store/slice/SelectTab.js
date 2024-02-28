@@ -18,6 +18,10 @@ const TabSlice = createSlice({
         return [...state, { id, file_name }];
       }
     },
+
+    setTab: (state, action) => {
+      return [];
+    },
   },
 });
 
@@ -25,3 +29,4 @@ export default TabSlice.reducer;
 export const { selectTab } = TabSlice.actions;
 export const { removeTabs } = TabSlice.actions;
 export const { addNewTab } = TabSlice.actions;
+export const { setTab } = TabSlice.actions;

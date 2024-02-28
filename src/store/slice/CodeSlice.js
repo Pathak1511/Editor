@@ -87,6 +87,15 @@ const codeSlice = createSlice({
     setCodeState: (state, action) => {
       return action.payload;
     },
+
+    setState: (state, action) => {
+      return {
+        id: "145",
+        name: "root",
+        isFolder: true,
+        items: [],
+      };
+    },
   },
 });
 
@@ -97,3 +106,4 @@ export const { deleteNode } = codeSlice.actions;
 export const { insertNode } = codeSlice.actions;
 export const { updateFileContent } = codeSlice.actions;
 export const { setCodeState } = codeSlice.actions;
+export const { setState } = codeSlice.actions;
