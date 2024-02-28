@@ -236,7 +236,7 @@ textarea {
 }
 .chat-message {
   position: absolute;
-  bottom: 40px;
+  bottom: 60px;
   right: 0px;
 }
 .chat-message-box {
@@ -276,7 +276,7 @@ textarea {
 }
 
 .chat-container {
-  max-height: 480px;
+  max-height: 444px;
   overflow-y: auto;
 }
 .sent-message,
