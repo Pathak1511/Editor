@@ -1,12 +1,15 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { updateFileContent } from "../store/slice/CodeSlice";
-import { selectTab, removeTabs } from "../store/slice/SelectTab";
+import { removeTabs } from "../store/slice/SelectTab";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
 import Editor from "./Editor";
+import BackendAPI from "../hooks/api";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function DisabledTabs({
   socketRef,
@@ -19,6 +22,40 @@ export default function DisabledTabs({
   let selectId = useSelector((state) => {
     return state.tabs;
   });
+
+  const codeData = useSelector((state) => state.code);
+
+  const handleSave = async (event) => {
+    if (event?.ctrlKey && event?.key === "s") {
+      event.preventDefault();
+      console.log(codeData);
+      let cookie = JSON.parse(localStorage.getItem("Cookie"));
+      const obj = JSON.stringify({
+        code: codeData,
+        room_id: id,
+      });
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${BackendAPI}/v1/Code/insert-code`,
+        headers: {
+          Authorization: `Bearer=${cookie}`,
+          "Content-Type": "application/json",
+        },
+        data: obj,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          toast.success("Code saved successfully");
+        })
+        .catch((error) => {
+          toast.error("Error while saving please try again later");
+          console.log(error);
+        });
+    }
+  };
 
   const tabId = useRef(selectId[0]?.id || "00000");
 
@@ -36,6 +73,13 @@ export default function DisabledTabs({
     tabId.current = selectId[index - 1]?.id;
     setTab(selectId[index - 1]?.id);
   };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleSave);
+    return () => {
+      document.removeEventListener("keydown", handleSave);
+    };
+  });
 
   return (
     <>
