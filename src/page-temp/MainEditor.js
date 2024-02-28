@@ -23,9 +23,11 @@ import axios from "axios";
 import BackendAPI from "../hooks/api";
 import { setCodeState, setState } from "../store/slice/CodeSlice";
 import { setTab } from "../store/slice/SelectTab";
+import Browser from "../components/Browser";
 
 function MainEditor() {
   const dispatch = useDispatch();
+
   const [user, setuser] = useState(localStorage.getItem("isAuthorized"));
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
@@ -46,7 +48,7 @@ function MainEditor() {
     setInputValue(value);
   };
 
-  const { id } = useParams();
+  const { id, env } = useParams();
   const [clients, setClients] = useState([]);
   const [output, setOutput] = useState("");
   const [outputSubject, setoutputSubject] = useState(["Success", "#2e7d32"]);
@@ -210,7 +212,7 @@ function MainEditor() {
   function leaveRoom() {
     dispatch(setState({ set: true }));
     dispatch(setTab({ set: true }));
-    reactNavigation("/create-coding-env");
+    reactNavigation("/");
   }
 
   if (!user) {
@@ -262,49 +264,56 @@ function MainEditor() {
             />
           </div>
         </div>
-        <div className="Output">
-          <div className="Output_Container">
-            <div className="Output_Header">
-              <div>Output</div>
-              {loading ? (
-                <CircularProgress color="success" size={20} />
-              ) : (
-                <div></div>
-              )}
-            </div>
 
-            <Grid
-              item
-              style={{
-                overflow: "auto",
-              }}
-            >
-              <Typography
-                className="output"
-                style={
-                  outputSubject[0] === "Error"
-                    ? { color: outputSubject[1] }
-                    : { color: "#f8f8f8" }
-                }
-                dangerouslySetInnerHTML={{ __html: output }}
-              ></Typography>
-            </Grid>
-          </div>
-          <div className="Output_Container">
-            <div className="Output_Header">
-              <div>Input</div>
+        <>
+          {env === "coding" ? (
+            <div className="Output">
+              <div className="Output_Container">
+                <div className="Output_Header">
+                  <div>Output</div>
+                  {loading ? (
+                    <CircularProgress color="success" size={20} />
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+
+                <Grid
+                  item
+                  style={{
+                    overflow: "auto",
+                  }}
+                >
+                  <Typography
+                    className="output"
+                    style={
+                      outputSubject[0] === "Error"
+                        ? { color: outputSubject[1] }
+                        : { color: "#f8f8f8" }
+                    }
+                    dangerouslySetInnerHTML={{ __html: output }}
+                  ></Typography>
+                </Grid>
+              </div>
+              <div className="Output_Container">
+                <div className="Output_Header">
+                  <div>Input</div>
+                </div>
+                <Grid>
+                  <textarea
+                    placeholder="Type your input here..."
+                    rows="4"
+                    value={args}
+                    onChange={(e) => setArgs(e.target.value)}
+                    style={{ color: "#f8f8f8" }}
+                  ></textarea>
+                </Grid>
+              </div>
             </div>
-            <Grid>
-              <textarea
-                placeholder="Type your input here..."
-                rows="4"
-                value={args}
-                onChange={(e) => setArgs(e.target.value)}
-                style={{ color: "#f8f8f8" }}
-              ></textarea>
-            </Grid>
-          </div>
-        </div>
+          ) : (
+            <Browser />
+          )}
+        </>
       </div>
       <Snackbar
         anchorOrigin={{ vertical, horizontal }}

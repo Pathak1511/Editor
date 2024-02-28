@@ -86,12 +86,12 @@ export default function Signin() {
           )
           .then(
             (response) => toast.success("New Room Created"),
-            navigate(`/editor/${id}`)
+            navigate(`/editor/${location.state?.env}/${id}`)
           )
           .catch((error) => console.log(error));
       }
     } else {
-      navigate(`/editor/${id}`);
+      navigate(`/editor/${location.state?.env}/${id}`);
     }
   };
 

@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import toast from "react-hot-toast";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import ShareIcon from "@mui/icons-material/Share";
+import { useParams } from "react-router-dom";
 
 function Header({
   leaveRoom,
@@ -17,6 +18,7 @@ function Header({
   codeRef,
   onSendCode,
 }) {
+  const { env } = useParams();
   return (
     <div>
       <div className="Header">
@@ -27,45 +29,52 @@ function Header({
 
         <div className="header_Container header_btn">
           <div>
-            {" "}
-            <Autocomplete
-              variant="standard"
-              value={value}
-              onChange={(event, newValue) => {
-                handleSetValue(newValue);
-              }}
-              inputValue={inputValue}
-              onInputChange={(event, newInputValue) => {
-                handleSetInputValue(newInputValue);
-              }}
-              id="flat-demo"
-              size="small"
-              sx={{ width: 180 }}
-              clearOnEscape
-              options={language}
-              renderInput={(params) => (
-                <TextField
-                  InputLabelProps={{ shrink: true }}
-                  {...params}
-                  className="languageText"
-                  label="C++"
-                />
-              )}
-            />
+            {env === "coding" ? (
+              <Autocomplete
+                variant="standard"
+                value={value}
+                onChange={(event, newValue) => {
+                  handleSetValue(newValue);
+                }}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                  handleSetInputValue(newInputValue);
+                }}
+                id="flat-demo"
+                size="small"
+                sx={{ width: 180 }}
+                clearOnEscape
+                options={language}
+                renderInput={(params) => (
+                  <TextField
+                    InputLabelProps={{ shrink: true }}
+                    {...params}
+                    className="languageText"
+                    label="C++"
+                  />
+                )}
+              />
+            ) : (
+              <></>
+            )}
           </div>
-          <Button
-            variant="contained"
-            color="success"
-            size="small"
-            onClick={() => {
-              inputValue !== "" && codeRef.current !== null
-                ? onSendCode(codeRef.current)
-                : toast.error("Please write code first");
-            }}
-            //onClick={copyId}
-          >
-            Run
-          </Button>
+          {env === "coding" ? (
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              onClick={() => {
+                inputValue !== "" && codeRef.current !== null
+                  ? onSendCode(codeRef.current)
+                  : toast.error("Please write code first");
+              }}
+              //onClick={copyId}
+            >
+              Run
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="header_Container header_btn">
           <Button

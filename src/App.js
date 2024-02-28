@@ -27,7 +27,7 @@ function App() {
         <Routes>
           <Route path="/create-coding-env" element={<Signin />} />
           <Route path="/" element={<Dashboard />} />
-          <Route path="/editor/:id" element={<MainEditor />} />
+          <Route path="/editor/:env/:id" element={<MainEditor />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<FuzzyOverlayError error={true} />} />

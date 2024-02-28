@@ -188,6 +188,7 @@ export default function RoomList({ url, url2 }) {
                                           state: {
                                             room_id: row.room_id,
                                             password: row.password,
+                                            env: row.environment,
                                           },
                                         })
                                       }
