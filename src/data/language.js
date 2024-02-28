@@ -4,12 +4,12 @@ const language = [
   "python",
   "c",
   "javascript",
-  // "c#", //
+  "c#",
   "ruby",
   "swift",
   "go",
   // "scala", //
-  // "kotlin", //
+  "kotlin",
   "rust",
   "php",
   "typescript",

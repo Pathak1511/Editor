@@ -109,10 +109,11 @@ export default function Signin() {
   const logOut = (e) => {
     e.preventDefault();
     dispatch(removeUser(false));
-    localStorage.removeItem("Cookie");
-    localStorage.removeItem("userName");
+    localStorage.clear();
+    // localStorage.removeItem("Cookie");
+    // localStorage.removeItem("userName");
     toast.success("Log out Successfully");
-    localStorage.removeItem("isAuthorized");
+    // localStorage.removeItem("isAuthorized");
 
     navigate("/login");
   };

@@ -4,6 +4,8 @@ import language from "../data/language";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import toast from "react-hot-toast";
+import CallEndIcon from "@mui/icons-material/CallEnd";
+import ShareIcon from "@mui/icons-material/Share";
 
 function Header({
   leaveRoom,
@@ -68,11 +70,11 @@ function Header({
         <div className="header_Container header_btn">
           <Button
             variant="contained"
-            color="success"
+            color="primary"
             size="small"
             onClick={copyId}
           >
-            Copy
+            <ShareIcon sx={{ fontSize: 24 }} />
           </Button>
           <Button
             variant="contained"
@@ -80,7 +82,7 @@ function Header({
             size="small"
             onClick={leaveRoom}
           >
-            Leave
+            <CallEndIcon sx={{ fontSize: 24 }} />
           </Button>
         </div>
       </div>

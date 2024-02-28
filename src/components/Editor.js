@@ -11,11 +11,28 @@ import "codemirror/mode/clike/clike";
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import ACTIONS from "../Actions";
-import toast from "react-hot-toast";
 import "codemirror/theme/material-darker.css";
 
 const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
   const editorRef = useRef(null);
+  const fetchFileContent = (node) => {
+    if (node.id === tabId && node.isFolder === false) {
+      return node.file_content;
+    }
+
+    for (let i = 0; i < node.items.length; i++) {
+      const content = fetchFileContent(node.items[i]);
+      if (content) {
+        return content;
+      }
+    }
+    return null;
+  };
+
+  // const getData = (data) =>{
+
+  // }
+
   const userName = JSON.parse(localStorage.getItem("userName"));
   useEffect(() => {
     async function init() {
@@ -68,8 +85,7 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
   }, [socketRef.current]);
 
   useEffect(() => {
-    const tabCode = parseInt(tabId, 10);
-    const tabContent = data.items[tabCode]?.file_content;
+    const tabContent = fetchFileContent(data) || "";
     if (editorRef.current) {
       editorRef.current.setValue(tabContent);
     }

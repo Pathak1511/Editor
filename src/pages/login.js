@@ -68,6 +68,7 @@ export default function Login() {
     const authorize = await axios
       .request(config)
       .then((response) => {
+        localStorage.clear();
         localStorage.setItem(
           "Cookie",
           JSON.stringify(response.data.content.meta.access_token)

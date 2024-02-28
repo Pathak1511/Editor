@@ -5,7 +5,7 @@ import language from "../data/language";
 import { initSocket } from "../socket";
 import ACTIONS from "../Actions";
 import piston from "piston-client";
-import { useNavigate, useParams } from "react-router-dom";
+import { json, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Fab from "@mui/material/Fab";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -19,15 +19,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import BasicTabs from "../components/Tabs";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "../pages/login";
+import axios from "axios";
+import BackendAPI from "../hooks/api";
+import { setCodeState } from "../store/slice/CodeSlice";
 
 function MainEditor() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => {
-    return state.code;
-  });
-  const [user, setuser] = useState(
-    localStorage.getItem("isAuthorized") || false
-  );
+
+  const [user, setuser] = useState(localStorage.getItem("isAuthorized"));
 
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
@@ -57,6 +56,23 @@ function MainEditor() {
   const [show, setShow] = useState("none");
   const [args, setArgs] = useState("");
   const [isadmin, setAdmin] = useState(false);
+  let data = useSelector((state) => state.code);
+
+  const getCode = () => {
+    let cookie = JSON.parse(localStorage.getItem("Cookie"));
+    axios
+      .get(`${BackendAPI}/v1/Code/get-code/${id}`, {
+        headers: {
+          Authorization: `Bearer=${cookie}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        toast.success("Synchronizing");
+        dispatch(setCodeState(response.data.code));
+      })
+      .catch((error) => toast.error("synchronization error "));
+  };
 
   const [origin, setOrigin] = React.useState({
     open: false,
@@ -64,6 +80,37 @@ function MainEditor() {
     horizontal: "right",
   });
   const { vertical, horizontal, open } = origin;
+
+  const handleSave = (event) => {
+    if (event.ctrlKey && event.key === "s") {
+      event.preventDefault();
+      let cookie = JSON.parse(localStorage.getItem("Cookie"));
+      const obj = JSON.stringify({
+        code: data,
+        room_id: id,
+      });
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${BackendAPI}/v1/Code/insert-code`,
+        headers: {
+          Authorization: `Bearer=${cookie}`,
+          "Content-Type": "application/json",
+        },
+        data: obj,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          toast.success("Code saved successfully");
+        })
+        .catch((error) => {
+          toast.error("Error while saving please try again later");
+          console.log(error);
+        });
+    }
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -171,7 +218,11 @@ function MainEditor() {
     };
     init();
 
+    getCode();
+    document.addEventListener("keydown", handleSave);
+
     return () => {
+      document.removeEventListener("keydown", handleSave);
       socketRef.current.off(ACTIONS.JOINED);
       socketRef.current.off(ACTIONS.JOIN);
       socketRef.current.disconnect({ id });
@@ -215,7 +266,7 @@ function MainEditor() {
           size="medium"
           onClick={() => (show === "" ? setShow("none") : setShow(""))}
         >
-          <ChatIcon background-color="#090b10" />
+          <ChatIcon background-color="#090b10" sx={{ fontSize: "24" }} />
         </Fab>
         {socketRef.current ? (
           <Chat

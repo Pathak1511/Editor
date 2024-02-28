@@ -6,29 +6,7 @@ const codeSlice = createSlice({
     id: "145",
     name: "root",
     isFolder: true,
-    items: [
-      {
-        id: "0",
-        name: "main.cpp",
-        isFolder: false,
-        items: [],
-        file_content: "// main cpp code",
-      },
-      {
-        id: "1",
-        name: "main.java",
-        isFolder: false,
-        items: [],
-        file_content: "// main java code",
-      },
-      {
-        id: "2",
-        name: "main.py",
-        isFolder: false,
-        items: [],
-        file_content: "// main python code",
-      },
-    ],
+    items: [],
   },
   reducers: {
     addCode: (state, action) => {
@@ -107,7 +85,7 @@ const codeSlice = createSlice({
     },
 
     setCodeState: (state, action) => {
-      return action.payload;
+      return (state = action.payload);
     },
   },
 });

@@ -20,21 +20,21 @@ export default function DisabledTabs({
     return state.tabs;
   });
 
-  const tabId = useRef("0");
+  const tabId = useRef(selectId[0]?.id || "00000");
 
   const [tab, setTab] = useState(tabId.current);
 
   const handleChange = (event, newValue) => {
     event.preventDefault();
     tabId.current = newValue.toString();
-    setTab(newValue);
+    setTab(newValue.toString());
   };
 
   const handleRemoveTab = (newValue) => {
     dispatch(removeTabs({ id: newValue }));
-    codeRef.current = "";
-    setTab(selectId[selectId.length - 2]?.id);
-    tabId.current = selectId[selectId.length - 2]?.id;
+    const index = selectId.findIndex((obj) => obj.id === newValue);
+    tabId.current = selectId[index - 1]?.id;
+    setTab(selectId[index - 1]?.id);
   };
 
   return (
@@ -59,7 +59,7 @@ export default function DisabledTabs({
                 {tabs.file_name}
                 <IconButton
                   size="small"
-                  onClick={() => handleRemoveTab(tabs.id)}
+                  onClick={() => handleRemoveTab(tabId.current)}
                   sx={{
                     color: "#1976d2",
                     fontSize: "14px",

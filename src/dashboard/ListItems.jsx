@@ -20,9 +20,10 @@ export default function ListItems({ changeTab, tab }) {
   const logOut = (e) => {
     e.preventDefault();
     dispatch(removeUser(false));
-    localStorage.removeItem("Cookie");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("isAuthorized");
+    localStorage.clear();
+    // localStorage.removeItem("Cookie");
+    // localStorage.removeItem("userName");
+    // localStorage.removeItem("isAuthorized");
     toast.success("Log out Successfully");
     navigate("/login");
   };
