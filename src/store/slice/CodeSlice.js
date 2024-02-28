@@ -85,7 +85,7 @@ const codeSlice = createSlice({
     },
 
     setCodeState: (state, action) => {
-      return (state = action.payload);
+      return action.payload;
     },
   },
 });
