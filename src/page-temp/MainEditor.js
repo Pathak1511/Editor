@@ -231,7 +231,7 @@ function MainEditor() {
 
   async function copyId() {
     try {
-      await navigator.clipboard.writeText(id);
+      await navigator.clipboard.writeText(window.location.href);
       toast.success("Id Copied Successfully");
     } catch (err) {
       toast.error("Could not Copy id");
