@@ -218,7 +218,7 @@ function MainEditor() {
     };
     init();
 
-    getCode();
+    // getCode();
     document.addEventListener("keydown", handleSave);
 
     return () => {
