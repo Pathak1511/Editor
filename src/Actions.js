@@ -6,6 +6,9 @@ const ACTIONS = {
   SYNC_CODE: "sync-code",
   LEAVE: "leave",
   CHAT: "chat",
+  ADMIN_ACCESS: "admin-access",
+  SEND_DECLINE: "send-decline",
+  REFERESH: "referesh",
 };
 
 module.exports = ACTIONS;

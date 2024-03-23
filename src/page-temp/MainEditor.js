@@ -24,10 +24,10 @@ import BackendAPI from "../hooks/api";
 import { setCodeState, setState } from "../store/slice/CodeSlice";
 import { setTab } from "../store/slice/SelectTab";
 import Browser from "../components/Browser";
+import { addAdminUser, clearAdminUser } from "./../store/slice/AdminReq";
 
 function MainEditor() {
   const dispatch = useDispatch();
-
   const [user, setuser] = useState(localStorage.getItem("isAuthorized"));
   const reactNavigation = useNavigate();
   const socketRef = useRef(null);
@@ -60,17 +60,30 @@ function MainEditor() {
   const getCode = () => {
     let cookie = JSON.parse(localStorage.getItem("Cookie"));
     axios
-      .get(`${BackendAPI}/v1/Code/get-code/${id}`, {
+      .get(`${BackendAPI}/v1/Code/get-code/${id}/${env}`, {
         headers: {
           Authorization: `Bearer=${cookie}`,
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        toast.success("Synchronizing");
+        localStorage.setItem("owner", response.data.owner);
+
         dispatch(setCodeState(response.data.code));
+        toast.success("Synchronizing");
       })
-      .catch((error) => toast.error("synchronization error "));
+      .catch((error) => console.log("error in synchronization"));
+    axios
+      .get(`${BackendAPI}/v1/Admin/getAllNotify/${id}/${env}`, {
+        headers: {
+          Authorization: `Bearer=${cookie}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        dispatch(addAdminUser(response.data.data));
+      })
+      .catch((error) => console.log("error in Notification"));
   };
 
   const [origin, setOrigin] = React.useState({
@@ -105,6 +118,44 @@ function MainEditor() {
   const onSendCode = async (Currentcode) => {
     setLoading(true);
 
+    ////////  UNCOMMENT OUT WHEN RUNNING USING DOCKER //////
+
+    // let data = JSON.stringify({
+    //   language: inputValue,
+    //   code: Currentcode,
+    // });
+
+    // let config = {
+    //   method: "post",
+    //   maxBodyLength: Infinity,
+    //   url: "http://localhost:5000/run",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: data,
+    // };
+
+    // const Output = await axios
+    //   .request(config)
+    //   .then((response) => {
+    //     const result = JSON.parse(JSON.stringify(response.data.output)).replace(
+    //       /\n/g,
+    //       "<br>"
+    //     );
+    //     setOutput(result);
+    //     setoutputSubject(["Success", "#2e7d32"]);
+    //   })
+    //   .catch((error) => {
+    //     const err = JSON.parse(
+    //       JSON.stringify(error.response.data.output)
+    //     ).replace(/\n/g, "<br>");
+    //     setOutput(err);
+    //     setoutputSubject(["Error", "#ff3333"]);
+    //   });
+
+    ////////  UNCOMMENT OUT WHEN RUNNING USING DOCKER END ABOVE//////
+
+    ////////  COMMENT OUT WHEN RUNNING USING DOCKER //////
     const client = piston({ server: "https://emkc.org" });
 
     const runtimes = await client.runtimes();
@@ -141,6 +192,8 @@ function MainEditor() {
       setOutput(result?.run?.stderr.replace(/\n/g, "<br>"));
       setoutputSubject(["Error", "#ff3333"]);
     }
+
+    ////////  COMMENT OUT WHEN RUNNING USING DOCKER END ABOVE//////
     setLoading(false);
     if (!expanded) handleChange();
   };
@@ -185,19 +238,58 @@ function MainEditor() {
           return prev.filter((client) => client.socketId !== socketId);
         });
       });
+
+      socketRef.current.on(ACTIONS.ADMIN_ACCESS, (data) => {
+        dispatch(addAdminUser(data.data));
+      });
+
+      socketRef.current.on(ACTIONS.REFERESH, ({ room_id: id }) => {
+        window.location.reload();
+      });
     };
     init();
 
     getCode();
-    // document.addEventListener("keydown", handleSave);
 
     return () => {
-      // document.removeEventListener("keydown", handleSave);
       socketRef.current.off(ACTIONS.JOINED);
       socketRef.current.off(ACTIONS.JOIN);
+      socketRef.current.off(ACTIONS.ADMIN_ACCESS);
+      socketRef.current.off(ACTIONS.REFERESH);
       socketRef.current.disconnect({ id });
     };
   }, []);
+
+  const sendAccessRequest = () => {
+    const data = JSON.stringify({
+      owner: localStorage.getItem("owner"),
+      userId: JSON.parse(localStorage.getItem("userId")),
+      userName: JSON.parse(localStorage.getItem("userName")),
+      id,
+    });
+
+    let config = {
+      method: "post",
+      url: `${BackendAPI}/v1/Admin/request-access`,
+      headers: {
+        Authorization: `Bearer=${JSON.parse(localStorage.getItem("Cookie"))}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((response) => {
+        socketRef.current.emit(ACTIONS.ADMIN_ACCESS, {
+          data: response.data.data,
+        });
+
+        toast.success(response.data.message);
+      })
+      .catch((error) => {
+        toast.error("unknown error occured");
+      });
+  };
 
   async function copyId() {
     try {
@@ -212,6 +304,7 @@ function MainEditor() {
   function leaveRoom() {
     dispatch(setState({ set: true }));
     dispatch(setTab({ set: true }));
+    dispatch(clearAdminUser());
     reactNavigation("/");
   }
 
@@ -230,6 +323,8 @@ function MainEditor() {
         inputValue={inputValue}
         codeRef={codeRef}
         onSendCode={onSendCode}
+        sendAccessRequest={sendAccessRequest}
+        socketRef={socketRef}
       />
       <div className="chat-icon">
         <Fab
@@ -311,7 +406,9 @@ function MainEditor() {
               </div>
             </div>
           ) : (
-            <Browser />
+            <div className="Output">
+              <Browser />
+            </div>
           )}
         </>
       </div>

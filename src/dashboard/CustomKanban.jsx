@@ -65,6 +65,7 @@ const Board = () => {
 
   useEffect(() => {
     fetchData();
+    console.log("useEffect");
   }, []);
 
   return (

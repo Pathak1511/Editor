@@ -87,6 +87,10 @@ export default function SignUp() {
             "userName",
             JSON.stringify(response.data.content.data.username)
           );
+          localStorage.setItem(
+            "userId",
+            JSON.stringify(response.data.content.data.id)
+          );
           localStorage.setItem("isAuthorized", true);
           navigate("/");
         })

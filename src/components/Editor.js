@@ -11,9 +11,17 @@ import "codemirror/mode/clike/clike";
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import ACTIONS from "../Actions";
-import "codemirror/theme/material-darker.css";
+import "codemirror/theme/material.css";
+import "codemirror/addon/hint/show-hint";
+import toast from "react-hot-toast";
 
 const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
+  function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
+
   const editorRef = useRef(null);
   const fetchFileContent = (node) => {
     if (node.id === tabId && node.isFolder === false) {
@@ -32,8 +40,6 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
   // const getData = (data) =>{
 
   // }
-
-  const userName = JSON.parse(localStorage.getItem("userName"));
   useEffect(() => {
     async function init() {
       editorRef.current = await Codemirror.fromTextArea(
@@ -43,10 +49,10 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
             name: "javascript",
             json: true,
           },
-          theme: "material-darker",
-          autoCloseTags: true,
+          theme: "material",
           autoCloseBrackets: true,
           lineNumbers: true,
+          "show-hint": true,
         }
       );
 
@@ -59,7 +65,7 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
             id,
             currentTabId: tabId,
             code,
-            userName,
+            owner: JSON.parse(localStorage.getItem("owner")),
           });
         }
       });
@@ -71,9 +77,13 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
     if (socketRef.current) {
       socketRef.current.on(
         ACTIONS.CODE_CHANGE,
-        ({ currentTabId, code, userName }) => {
-          if (code !== "" && currentTabId === tabId) {
-            editorRef.current.setValue(code);
+        ({ currentTabId, code, owner }) => {
+          if (
+            code !== "" &&
+            currentTabId === tabId &&
+            owner != JSON.parse(localStorage.getItem("userId"))
+          ) {
+            editorRef.current.setValue(decodeHtml(code));
           }
         }
       );
@@ -86,8 +96,8 @@ const Editor = ({ socketRef, id, onCodeChange, tabId, data, isadmin }) => {
 
   useEffect(() => {
     const tabContent = fetchFileContent(data) || "";
-    if (editorRef.current) {
-      editorRef.current.setValue(tabContent);
+    if (editorRef.current && tabId !== -1) {
+      editorRef.current.setValue(decodeHtml(tabContent));
     }
   }, [tabId]);
 

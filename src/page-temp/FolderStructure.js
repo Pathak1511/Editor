@@ -60,30 +60,30 @@ function FolderStructure({ explorer }) {
           <span>
             <FolderIcon
               round="2px"
-              style={{ color: "#f8d775", marginRight: "5px" }}
+              style={{ color: "#f8d775", marginRight: "2px" }}
               sx={{
                 "&:hover": { "& svg": { visibility: "visible" } },
-                fontSize: 18,
+                fontSize: 14,
               }}
             />
             {explorer.name}
             &nbsp;{" "}
             <CloseIcon
-              sx={{ fontSize: 18, visibility: "hidden" }}
+              sx={{ fontSize: 14, visibility: "hidden" }}
               onClick={(e) => handleDeleteNode(e)}
             />
           </span>
 
           <div>
             <InsertDriveFileIcon
-              sx={{ fontSize: 18 }}
+              sx={{ fontSize: 14 }}
               round="2px"
               style={{ color: "#1976d2", marginRight: "2px" }}
               onClick={(e) => handleNewFolder(e, false, explorer.id)}
             />
             &nbsp;
             <CreateNewFolderIcon
-              sx={{ fontSize: 18 }}
+              sx={{ fontSize: 14 }}
               round="2px"
               style={{ color: "#1976d2", marginRight: "2px" }}
               onClick={(e) => handleNewFolder(e, true, explorer.id)}

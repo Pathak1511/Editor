@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import BackendAPI from "../hooks/api";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../store/slice/UserSlice";
 import axios from "axios";
@@ -70,7 +70,7 @@ export default function Signin() {
       } else {
         axios
           .post(
-            "https://codeflow-3ir4.onrender.com/v1/room",
+            `${BackendAPI}/v1/room`,
             {
               env: location.state?.env || "Custom Room",
               room_id: id,
@@ -86,7 +86,9 @@ export default function Signin() {
           )
           .then(
             (response) => toast.success("New Room Created"),
-            navigate(`/editor/${location.state?.env}/${id}`)
+            setTimeout(() => {
+              navigate(`/editor/${location.state?.env}/${id}`);
+            }, 1000)
           )
           .catch((error) => console.log(error));
       }

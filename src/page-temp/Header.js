@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import ShareIcon from "@mui/icons-material/Share";
 import { useParams } from "react-router-dom";
-
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import SimpleDialogDemo from "../components/RequestAdmin";
 function Header({
   leaveRoom,
   copyId,
@@ -17,6 +18,8 @@ function Header({
   inputValue,
   codeRef,
   onSendCode,
+  sendAccessRequest,
+  socketRef,
 }) {
   const { env } = useParams();
   return (
@@ -58,6 +61,7 @@ function Header({
               <></>
             )}
           </div>
+
           {env === "coding" ? (
             <Button
               variant="contained"
@@ -77,6 +81,30 @@ function Header({
           )}
         </div>
         <div className="header_Container header_btn">
+          <div
+            style={
+              JSON.parse(localStorage.getItem("owner")) ==
+              JSON.parse(localStorage.getItem("userId"))
+                ? {}
+                : { display: "none" }
+            }
+          >
+            <SimpleDialogDemo socketRef={socketRef} />
+          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            style={
+              JSON.parse(localStorage.getItem("owner")) ==
+              JSON.parse(localStorage.getItem("userId"))
+                ? { display: "none" }
+                : {}
+            }
+            onClick={sendAccessRequest}
+          >
+            Request <AdminPanelSettingsIcon sx={{ fontSize: 24 }} />
+          </Button>
           <Button
             variant="contained"
             color="primary"

@@ -16,6 +16,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import BackendAPI from "../hooks/api";
+import { useDispatch } from "react-redux";
+import { addUser } from "../store/slice/UserSlice";
 
 function Copyright(props) {
   return (
@@ -40,6 +42,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [chooseUsername, setChooseEmail] = useState(false);
@@ -77,7 +80,12 @@ export default function Login() {
           "userName",
           JSON.stringify(response.data.content.data.username)
         );
+        localStorage.setItem(
+          "userId",
+          JSON.stringify(response.data.content.data.id)
+        );
         localStorage.setItem("isAuthorized", true);
+        // dispatch(addUser({ myId: response.data.content.data.id }));
         return "success";
       })
       .catch((error) => {

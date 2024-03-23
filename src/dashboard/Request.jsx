@@ -99,7 +99,7 @@ export default function Request({ url, btn, isnotify, setNotificationCounts }) {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   const sendNodification = (community, to) => {
     const cookie = JSON.parse(localStorage.getItem("Cookie"));
@@ -124,13 +124,13 @@ export default function Request({ url, btn, isnotify, setNotificationCounts }) {
       });
   };
 
-  const acceptInvite = (data) => {
+  const acceptInvite = async (data) => {
     axios
       .post(`${BackendAPI}/v1/Notification/accept-notifications`, data)
       .then(
         (response) => console.log(response.data),
         toast.success("Invite accepted successfully"),
-        fetchData()
+        await fetchData()
       )
       .catch((error) => console.log(error));
   };

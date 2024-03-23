@@ -28,7 +28,6 @@ export default function DisabledTabs({
   const handleSave = async (event) => {
     if (event?.ctrlKey && event?.key === "s") {
       event.preventDefault();
-      console.log(codeData);
       let cookie = JSON.parse(localStorage.getItem("Cookie"));
       const obj = JSON.stringify({
         code: codeData,
@@ -42,7 +41,7 @@ export default function DisabledTabs({
           Authorization: `Bearer=${cookie}`,
           "Content-Type": "application/json",
         },
-        data: obj,
+        data: JSON.parse(obj),
       };
 
       axios
@@ -52,12 +51,12 @@ export default function DisabledTabs({
         })
         .catch((error) => {
           toast.error("Error while saving please try again later");
-          console.log(error);
+          // console.log(error);
         });
     }
   };
 
-  const tabId = useRef(selectId[0]?.id || "00000");
+  const tabId = useRef(selectId[0]?.id || -1);
 
   const [tab, setTab] = useState(tabId.current);
 

@@ -3,7 +3,7 @@ import { FiAlertCircle } from "react-icons/fi";
 
 const pData = {
   developer:
-    "Welcome to the Development Environment of CodeFlow! This is where you can build and test your React applications in a hassle-free and collaborative manner. Our intelligent IDE (Integrated Development Environment) provides a rich set of features to enhance your coding experience.",
+    "Welcome to the Development Environment of CodeFlow! This is where you can write code for Html/Css based application in a hassle-free and collaborative manner using our IDE (Integrated Development Environment) which provides a rich set of features to enhance your coding experience. Make sure to write file name using index `.` extension",
   coding:
     "Welcome to the Coding Environment of CodeFlow! This is where you can collaborate with others to write optimal code in any programming language. Our platform offers a user-friendly and collaborative coding environment, designed to help you solve problems efficiently and effectively.",
 };
