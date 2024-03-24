@@ -83,7 +83,7 @@ function Header({
         <div className="header_Container header_btn">
           <div
             style={
-              JSON.parse(localStorage.getItem("owner")) ==
+              JSON.parse(localStorage.getItem("owner") || "null") ==
               JSON.parse(localStorage.getItem("userId"))
                 ? {}
                 : { display: "none" }
@@ -96,7 +96,7 @@ function Header({
             color="primary"
             size="small"
             style={
-              JSON.parse(localStorage.getItem("owner")) ==
+              JSON.parse(localStorage.getItem("owner") || "null") ==
               JSON.parse(localStorage.getItem("userId"))
                 ? { display: "none" }
                 : {}
