@@ -83,7 +83,7 @@ function Header({
         <div className="header_Container header_btn">
         <div
   style={
-    localStorage.getItem("owner") &&
+    localStorage.getItem("owner") != 'undefined' &&
     localStorage.getItem("userId") &&
     JSON.parse(localStorage.getItem("owner")) === JSON.parse(localStorage.getItem("userId"))
       ? {}
@@ -97,7 +97,7 @@ function Header({
   color="primary"
   size="small"
   style={
-    localStorage.getItem("owner") &&
+    localStorage.getItem("owner") != 'undefined' &&
     localStorage.getItem("userId") &&
     JSON.parse(localStorage.getItem("owner")) === JSON.parse(localStorage.getItem("userId"))
       ? { display: "none" }
