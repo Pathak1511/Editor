@@ -81,30 +81,32 @@ function Header({
           )}
         </div>
         <div className="header_Container header_btn">
-          <div
-            style={
-              JSON.parse(localStorage.getItem("owner") || "null") ==
-              JSON.parse(localStorage.getItem("userId"))
-                ? {}
-                : { display: "none" }
-            }
-          >
-            <SimpleDialogDemo socketRef={socketRef} />
-          </div>
+        <div
+  style={
+    localStorage.getItem("owner") &&
+    localStorage.getItem("userId") &&
+    JSON.parse(localStorage.getItem("owner")) === JSON.parse(localStorage.getItem("userId"))
+      ? {}
+      : { display: "none" }
+  }
+>
+  <SimpleDialogDemo socketRef={socketRef} />
+</div>
           <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            style={
-              JSON.parse(localStorage.getItem("owner") || "null") ==
-              JSON.parse(localStorage.getItem("userId"))
-                ? { display: "none" }
-                : {}
-            }
-            onClick={sendAccessRequest}
-          >
-            Request <AdminPanelSettingsIcon sx={{ fontSize: 24 }} />
-          </Button>
+  variant="contained"
+  color="primary"
+  size="small"
+  style={
+    localStorage.getItem("owner") &&
+    localStorage.getItem("userId") &&
+    JSON.parse(localStorage.getItem("owner")) === JSON.parse(localStorage.getItem("userId"))
+      ? { display: "none" }
+      : {}
+  }
+  onClick={sendAccessRequest}
+>
+  Request <AdminPanelSettingsIcon sx={{ fontSize: 24 }} />
+</Button>
           <Button
             variant="contained"
             color="primary"
